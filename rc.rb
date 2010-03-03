@@ -13,13 +13,13 @@ before do
 end
 
 put '/server_restart' do
-  output = IO.popen('rake mongrel:stopall').readlines
-  output + IO.popen('rake mongrel:startall').readlines
+  output = `rake mongrel:stopall`
+  output + `rake mongrel:startall`
   return output
 end
 
 put '/db_migrate' do
-  IO.popen('rake db:migrate').readlines
+  `rake db:migrate`
 end
 
 def check_auth(token)
