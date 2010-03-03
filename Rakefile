@@ -31,6 +31,20 @@ namespace :db do
 
 end
 
+namespace :mongrel do
+	task :startall do 
+		sh 'mongrel_rails start -d -p 3001 -P log/mongrel1.pid' 
+		sh 'mongrel_rails start -d -p 3002 -P log/mongrel2.pid' 
+		sh 'mongrel_rails start -d -p 3003 -P log/mongrel3.pid' 
+	end
+	task :stopall do 
+		sh 'mongrel_rails stop -P log/mongrel1.pid' 
+		sh 'mongrel_rails stop -P log/mongrel2.pid' 
+		sh 'mongrel_rails stop -P log/mongrel3.pid' 
+	end
+
+end
+
 task :initall do
   sh 'script/install'
   Rake::Task["db:test:prepare"].invoke
