@@ -58,6 +58,7 @@ namespace :mongrel do
 end
 
 namespace :rc do
+  require 'rubygems'
   require 'httparty'
   require 'yaml'
 
