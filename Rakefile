@@ -59,7 +59,7 @@ end
 
 namespace :rc do
   require 'httparty'
-  require 'YAML'
+  require 'yaml'
 
   RC_SERVER = ENV["RC_SERVER"] || "74.208.174.238"
   RC_PORT = ENV["RC_PORT"] || 23432
