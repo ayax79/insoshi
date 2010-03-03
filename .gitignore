@@ -13,7 +13,6 @@ doc/*.doc
 db/schema.rb
 db/schema.sql
 db/*.sqlite3*
-config/database.yml
 public/photos/*
 public/thumbnails
 uuid.state

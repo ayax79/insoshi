@@ -1,0 +1,27 @@
+development:
+  adapter: postgresql
+  database: insoshi_development
+  username: andrew
+  password:
+  timeout: 5000
+  
+test:
+  adapter: postgresql
+  database: insoshi_test
+  username: andrew
+  password: 
+  timeout: 5000
+
+staging:
+  adapter: postgresql
+  database: insoshi_staging
+  username: andrew
+  password: 
+  timeout: 5000
+
+production:
+  adapter: postgresql
+  database: insoshi_production
+  username: insoshi
+  password: p00poo
+  timeout: 5000
