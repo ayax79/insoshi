@@ -95,7 +95,6 @@ namespace :rc do
       doc.each_pair do |key, val|
         current_username = key
         current_token = val['token']
-        puts current_token
         return current_token if current_username == username
       end
     end
