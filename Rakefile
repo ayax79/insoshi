@@ -76,7 +76,7 @@ namespace :rc do
     puts "executing put -> " + cmd
     puts HTTParty::put cmd, :query => {:token => get_token}
   end
-  
+
   task :stop do
     cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_stop"
     puts "executing put -> " + cmd
@@ -92,10 +92,14 @@ namespace :rc do
   def get_token
     username = ENV['USER'] || ENV['USERNAME']
     YAML::load_documents(File.open(File.join(File.dirname(__FILE__), 'config', 'rc.yml'))) do |doc|
-      current_username = doc['user']['username']
-      current_token = doc['user']['token']
-      return current_token if current_username == username
+      doc.each_pair do |key, val|
+        current_username = key
+        current_token = val['token']
+        puts current_token
+        return current_token if current_username == username
+      end
     end
+
     raise NameError, "Could not find a token for user #{username}, add one to config/rc.yml and push to server"
   end
 
