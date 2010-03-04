@@ -18,6 +18,14 @@ put '/server_restart' do
   return output
 end
 
+put '/server_stop' do
+  `rake mongrel:stopall`
+end
+
+put '/server_start' do
+  `rake mongrel:startall`
+end
+
 put '/db_migrate' do
   `rake db:migrate`
 end

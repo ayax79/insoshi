@@ -71,6 +71,18 @@ namespace :rc do
     puts HTTParty::put cmd, :query => {:token => get_token}
   end
 
+  task :start do
+    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_start"
+    puts "executing put -> " + cmd
+    puts HTTParty::put cmd, :query => {:token => get_token}
+  end
+  
+  task :stop do
+    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_stop"
+    puts "executing put -> " + cmd
+    puts HTTParty::put cmd, :query => {:token => get_token}
+  end
+
   task :migrate do
     cmd = "http://#{RC_SERVER}:#{RC_PORT}/db_migrate"
     puts "executing put -> " + cmd
