@@ -1,6 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  
+
   ## Application-wide values
   def app_name
     name = global_prefs.app_name
@@ -9,9 +9,9 @@ module ApplicationHelper
   end
 
   ## Menu helpers
-  
+
   def menu
-    home     = menu_element("Dashboard",   home_path)
+    home     = menu_element("Dashboard", home_path)
     people   = menu_element("People", people_path)
     if Forum.count == 1
       forum = menu_element("Forum", forum_path(Forum.find(:first)))
@@ -21,7 +21,7 @@ module ApplicationHelper
     resources = menu_element("Resources", "http://docs.insoshi.com/")
 
     if logged_in? and not admin_view?
-      profile  = menu_element("Profile",  person_path(current_person))
+      profile  = menu_element("Profile", person_path(current_person))
       messages = menu_element("Messages", messages_path)
       #blog     = menu_element("Blog",     blog_path(current_person.blog))
       #photos   = menu_element("Photos",   photos_path)
@@ -32,7 +32,7 @@ module ApplicationHelper
       links = [home, profile, messages, people, forum]
       # TODO: put this in once events are ready.
       # links.push(events)
-      
+
     elsif logged_in? and admin_view?
       home =    menu_element("Home", home_path)
       people =  menu_element("People", admin_people_path)
@@ -53,39 +53,39 @@ module ApplicationHelper
   def menu_element(content, address)
     { :content => content, :href => address }
   end
-  
+
   def menu_link_to(link, options = {})
     link_to(link[:content], link[:href], options)
   end
-  
+
   def menu_li(link, options = {})
     klass = "n-#{link[:content].downcase}"
     klass += " active" if current_page?(link[:href])
     content_tag(:li, menu_link_to(link, options), :class => klass)
   end
-  
+
   def login_block
     forgot = global_prefs.can_send_email? ? '<br />' + link_to('I forgot my password', new_password_reminder_path) : ''
     content_tag(:span, link_to("Sign in", login_path) + ' or ' +
-                       link_to("Sign up", signup_path) + 
-                       forgot)
+            link_to("Sign up", signup_path) +
+            forgot)
   end
 
   # Return true if the user is viewing the site in admin view.
   def admin_view?
     params[:controller] =~ /admin/ and admin?
   end
-  
+
   def admin?
     logged_in? and current_person.admin?
   end
-  
+
   # Set the input focus for a specific id
   # Usage: <%= set_focus_to 'form_field_label' %>
   def set_focus_to(id)
     javascript_tag(" $(document).ready(function(){$('##{id}').focus()});");
   end
-  
+
   # Display text by sanitizing and formatting.
   # The html_options, if present, allow the syntax
   #  display("foo", :class => "bar")
@@ -105,7 +105,7 @@ module ApplicationHelper
     end
     add_tag_options(processed_text, tag_opts)
   end
-  
+
   # Output a column div.
   # The current two-column layout has primary & secondary columns.
   # The options hash is handled so that the caller can pass options to 
@@ -150,43 +150,49 @@ module ApplicationHelper
                   "http://daringfireball.net/projects/markdown/basics",
                   :popup => true)}
        formatting supported)
-    else 
+    else
       "HTML formatting supported"
     end
   end
 
+  def artist_link(artist) 
+    link_to artist.name, :controller => "artists", :action => "show", :id => artist.name
+  end
+
   private
-  
-    def inflect(word, number)
-      number > 1 ? word.pluralize : word
+
+  def inflect(word, number)
+    number > 1 ? word.pluralize : word
+  end
+
+  def add_tag_options(text, options)
+    text.gsub("<p>", "<p#{options}>")
+  end
+
+  # Format text using BlueCloth (or RDiscount) if available.
+  def format(text)
+    if text.nil?
+      ""
+    elsif defined?(RDiscount)
+      RDiscount.new(text).to_html
+    elsif defined?(BlueCloth)
+      BlueCloth.new(text).to_html
+    elsif no_paragraph_tag?(text)
+      content_tag :p, text
+    else
+      text
     end
-    
-    def add_tag_options(text, options)
-      text.gsub("<p>", "<p#{options}>")
-    end
-    
-    # Format text using BlueCloth (or RDiscount) if available.
-    def format(text)
-      if text.nil?
-        ""
-      elsif defined?(RDiscount)
-        RDiscount.new(text).to_html
-      elsif defined?(BlueCloth)
-        BlueCloth.new(text).to_html
-      elsif no_paragraph_tag?(text)
-        content_tag :p, text
-      else
-        text
-      end
-    end
-    
-    # Is a Markdown library present?
-    def markdown?
-      defined?(RDiscount) or defined?(BlueCloth)
-    end
-    
-    # Return true if the text *doesn't* start with a paragraph tag.
-    def no_paragraph_tag?(text)
-      text !~ /^\<p/
-    end
+  end
+
+  # Is a Markdown library present?
+  def markdown?
+    defined?(RDiscount) or defined?(BlueCloth)
+  end
+
+  # Return true if the text *doesn't* start with a paragraph tag.
+  def no_paragraph_tag?(text)
+    text !~ /^\<p/
+  end
+
+
 end

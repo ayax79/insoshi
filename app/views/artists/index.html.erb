@@ -3,7 +3,7 @@
 <div id="artist-list">
   <ul>
     <% @artists.each do |artist| %>
-        <li><%= link_to artist.name, artist %></li>
+        <li><%= artist_link artist %></li>
     <% end %>
   </ul>
 </div>
