@@ -54,6 +54,8 @@ ActionController::Routing::Routes.draw do |map|
       topic.resources :posts
     end
   end
+
+  map.resources :artists  
   
   map.signup '/signup', :controller => 'people', :action => 'new'
   map.login '/login', :controller => 'sessions', :action => 'new'

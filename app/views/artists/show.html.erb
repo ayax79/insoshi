@@ -1,0 +1,19 @@
+<h1> Place holder for <%= @artist.name %></h1>
+
+<div id="artist-fans-list">
+<% if @artist.fans %>
+    Fans:
+    <% @artist.fans do |fan| %>
+        <%= fan.name %><br />
+    <% end %>
+<% end %>
+</div>
+
+<div id="artist-members-list">
+<% if @artist.members %>
+    Members:
+    <% @artist.members do |member| %>
+        <%= member.name %><br />
+    <% end %>
+<% end %>
+</div>
