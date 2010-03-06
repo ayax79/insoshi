@@ -1,14 +1,12 @@
 class CreateArtists < ActiveRecord::Migration
   def self.up
-    create_table :artists_fans do |t|
+    create_table :artists_fans, :id => false do |t|
       t.integer :artist_id
       t.integer :person_id 
-      t.timestamps
     end
-    create_table :artists_members do |t|
+    create_table :artists_members, :id => false  do |t|
       t.integer :artist_id
       t.integer :person_id
-      t.timestamps
     end
     create_table :artists do |t|
       t.string :name, :null => false, :unique => true

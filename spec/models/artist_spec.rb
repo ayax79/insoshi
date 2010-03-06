@@ -27,48 +27,22 @@ describe Artist do
   it "should have members" do
     @artist.members.should be_a_kind_of(Array)
     @artist.members.should have(2).items
-    @artist.members.should contain_person_with_name('Quentin')
-    @artist.members.should contain_person_with_name('Aaron')
-    @artist.members.should_not contain_person_with_name('admin')
-    @artist.members.should_not contain_person_with_name('Kelly')
+    @artist.members.should contain(people(:quentin))
+    @artist.members.should contain(people(:aaron))
+    @artist.members.should_not contain(people(:admin))
+    @artist.members.should_not contain(people(:kelly))
   end
 
   it "should have fans" do
     @artist.fans.should be_a_kind_of(Array)
     @artist.fans.should have(2).items
-    @artist.fans.should_not contain_person_with_name('Quentin')
-    @artist.fans.should_not contain_person_with_name('Aaron')
-    @artist.fans.should contain_person_with_name('admin')
-    @artist.fans.should contain_person_with_name('Kelly')
+    @artist.fans.should_not contain(people(:quentin))
+    @artist.fans.should_not contain(people(:aaron))
+    @artist.fans.should contain(people(:admin))
+    @artist.fans.should contain(people(:kelly))
   end
 
   private
-
-  def contain_person_with_name(name)
-    return ContainPersonWithName.new(name)
-  end
-
-  class ContainPersonWithName
-    def initialize(expected)
-      @expected = expected
-    end
-    def matches?(target)
-      @target = target
-
-      found = false
-      target.each do |person|
-        found = true if person.name == @expected
-      end
-      found
-    end
-    
-    def failure_message
-      "expected #{@target.inspect} to contain person with name #{@expected}"
-    end
-    def negative_failure_message
-      "expected #{@target.inspect} not contain person with name #{@expected}"
-    end
-  end
 
   def create_artist(options ={})
     a = Artist.new(options)

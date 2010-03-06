@@ -33,7 +33,7 @@ class Person < ActiveRecord::Base
   extend PreferencesHelper
 
   attr_accessor :password, :verify_password, :new_password,
-                :sorted_photos
+                :sorted_photos, :membered_artist, :fanned_artists
   attr_accessible :email, :password, :password_confirmation, :name,
                   :description, :connection_notifications,
                   :message_notifications, :wall_comment_notifications,
@@ -121,6 +121,9 @@ class Person < ActiveRecord::Base
   before_update :set_old_description
   after_update :log_activity_description_changed
   before_destroy :destroy_activities, :destroy_feeds
+
+  has_and_belongs_to_many :membered_artists, :class_name => 'Artist', :join_table => 'artists_members'
+  has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
 
   class << self
 

@@ -471,6 +471,14 @@ describe Person do
       end
     end
   end
+
+  describe "artist associations" do
+    it "should be a member of a band" do
+      @person.membered_artists.should be_a_kind_of(Array)
+      @person.membered_artists.should_not be_empty
+      @person.membered_artists.should contain(artists(:foobars))
+    end
+  end
     
   protected
 
