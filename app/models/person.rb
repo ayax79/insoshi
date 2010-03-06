@@ -33,7 +33,7 @@ class Person < ActiveRecord::Base
   extend PreferencesHelper
 
   attr_accessor :password, :verify_password, :new_password,
-                :sorted_photos, :membered_artist, :fanned_artists
+                :sorted_photos
   attr_accessible :email, :password, :password_confirmation, :name,
                   :description, :connection_notifications,
                   :message_notifications, :wall_comment_notifications,

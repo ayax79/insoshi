@@ -5,11 +5,11 @@ class HomeController < ApplicationController
     @body = "home"
     @topics = Topic.find_recent
     @members = Person.find_recent
-    @membered_artists = @current_person.membered_artists
     if logged_in?
       @feed = current_person.feed
       @some_contacts = current_person.some_contacts
       @requested_contacts = current_person.requested_contacts
+      @membered_artists = current_person.membered_artists
     else
       @feed = Activity.global_feed
     end    
