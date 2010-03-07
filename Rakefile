@@ -19,15 +19,23 @@ task :initall do
 end
 
 task :reinit do
-  Rake::Task["ultrasphinx:daemon:stop"].invoke
-  Rake::Task["db:drop"].invoke
+  begin
+    Rake::Task["ultrasphinx:daemon:stop"].invoke
+  rescue
+    # we don't care if it wasn't running
+  end
+  begin
+    Rake::Task["db:drop"].invoke
+  rescue
+    # we don't care if the db doesn't already exist
+  end
   Rake::Task[:initall].invoke
   Rake::Task["ultrasphinx:daemon:start"].invoke
 end
 
 namespace :ultrasphinx do
 
-  task :postgres do 
+  task :postgres do
     sphinx_pg_dir = File.join File.dirname(__FILE__), 'vendor', 'plugins', 'ultrasphinx', 'lib', 'ultrasphinx', 'postgresql'
     databases = %w[insoshi_development insoshi_production insoshi_staging insoshi_test]
     scripts = %w[language.sql concat_ws.sql crc32.sql group_concat.sql hex_to_int.sql unix_timestamp.sql]
