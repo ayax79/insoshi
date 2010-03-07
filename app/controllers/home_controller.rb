@@ -10,6 +10,7 @@ class HomeController < ApplicationController
       @some_contacts = current_person.some_contacts
       @requested_contacts = current_person.requested_contacts
       @membered_artists = current_person.membered_artists
+      @fanned_artists = current_person.fanned_artists
     else
       @feed = Activity.global_feed
     end    

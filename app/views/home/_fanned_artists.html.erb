@@ -1,7 +1,7 @@
-<% unless @membered_artists.empty? %>
-    <h2>Your Artists</h2>
+<% unless @fanned_artists.empty? %>
+    <h2>Your a fan of</h2>
     <ul class="list requests small">
-      <%- @membered_artists.each do |artist| -%>
+      <%- @fanned_artists.each do |artist| -%>
           <li>
             <!--<div class="artist-image">-->
               <!-- image here -->

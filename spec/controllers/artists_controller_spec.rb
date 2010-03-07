@@ -37,4 +37,11 @@ describe ArtistsController do
     response.should redirect_to(artist_url(assigns(:artist)))
   end
 
+  it "should have a working fan link" do
+    person = login_as(:quentin)
+    get :fan, :id => @artist
+    response.should redirect_to(artist_url(@artist))
+    assigns(:artist).fans.should contain(person)
+  end
+
 end

@@ -10,20 +10,24 @@ require 'tasks/rails'
 
 task :initall do
   sh 'script/install'
+  Rake::Task["db:migrate"].invoke
   Rake::Task["db:test:prepare"].invoke
   Rake::Task["ultrasphinx:postgres"].invoke
   Rake::Task["ultrasphinx:configure"].invoke
   Rake::Task["ultrasphinx:index"].invoke
+  Rake::Task["ultrasphinx:daemon:start"].invoke
 end
 
 task :reinit do
-  Rake::Task["db:dropall"].invoke
+  Rake::Task["ultrasphinx:daemon:stop"].invoke
+  Rake::Task["db:drop"].invoke
   Rake::Task[:initall].invoke
+  Rake::Task["ultrasphinx:daemon:start"].invoke
 end
 
 namespace :ultrasphinx do
 
-  task :postgres do
+  task :postgres do 
     sphinx_pg_dir = File.join File.dirname(__FILE__), 'vendor', 'plugins', 'ultrasphinx', 'lib', 'ultrasphinx', 'postgresql'
     databases = %w[insoshi_development insoshi_production insoshi_staging insoshi_test]
     scripts = %w[language.sql concat_ws.sql crc32.sql group_concat.sql hex_to_int.sql unix_timestamp.sql]

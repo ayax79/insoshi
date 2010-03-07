@@ -4,25 +4,26 @@
   <%= @artist.bio %>
 </div>
 
-<div id="artist-members-list">
-  <% if @artist.members %>
+<% unless @artist.members.empty? %>
+    <div id="artist-members-list">
       <div id="members-title">Members (<span class="artist-member-count"><%= @artist.members.size %></span>):</div>
       <ul>
         <% @artist.members.each do |member| %>
             <li><%= link_to member.name, member %></li>
         <% end %>
       </ul>
-  <% end %>
-</div>
+    </div>
+<% end %>
 
-<div id="artist-fans-list">
-  <% if @artist.fans %>
+<% unless @artist.fans.empty? %>
+    <div id="artist-fans-list">
       <div id="fans-title">Fans (<span class="artist-fan-count"><%= @artist.fans.size %></span>):</div>
       <ul>
         <% @artist.fans.each do |fan| %>
             <li><%= link_to fan.name, fan %></li>
         <% end %>
       </ul>
-  <% end %>
-</div>
+    </div>
+<% end %>
 
+<%= fan_link @current_person, @artist %>

@@ -1,9 +1,11 @@
 class ArtistsController < ApplicationController
+  include ArtistHelper
 
   before_filter :login_required, :except => [:index, :show]
 
   def index
     @artists = Artist.all
+    @current_person = current_person
 
     respond_to do |format|
       format.html
@@ -44,6 +46,16 @@ class ArtistsController < ApplicationController
       else
         format.html { render :action => 'new'}
       end
+    end
+  end
+
+  def fan
+    @artist = Artist.find(params[:id])
+    #noinspection RubyDuckType
+    @artist.fans << current_person unless is_fan current_person, @artist
+    @artist.save
+    respond_to do |format|
+      format.html { redirect_to :action => 'show', :id => @artist }
     end
   end
 

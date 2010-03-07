@@ -18,6 +18,7 @@ module ApplicationHelper
     else
       forum = menu_element("Forums", forums_path)
     end
+    artist = menu_element("Artists", artists_path)
     resources = menu_element("Resources", "http://docs.insoshi.com/")
 
     if logged_in? and not admin_view?
@@ -29,7 +30,7 @@ module ApplicationHelper
       #                        person_connections_path(current_person))
       events   = menu_element("Events", events_path)
       #links = [home, profile, contacts, messages, blog, people, forum]
-      links = [home, profile, messages, people, forum]
+      links = [home, profile, messages, people, forum, artist]
       # TODO: put this in once events are ready.
       # links.push(events)
 
@@ -39,9 +40,9 @@ module ApplicationHelper
       forums =  menu_element(inflect("Forum", Forum.count),
                              admin_forums_path)
       preferences = menu_element("Prefs", admin_preferences_path)
-      links = [home, people, forums, preferences]
+      links = [home, people, forums, preferences, artist]
     else
-      links = [home, people]
+      links = [home, people, artist]
     end
     if global_prefs.about.blank?
       links
