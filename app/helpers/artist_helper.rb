@@ -1,11 +1,11 @@
 module ArtistHelper
 
   def is_member(person, artist)
-    person and person.membered_artists.include? artist
+    person and person.is_a? Person and person.membered_artists.include? artist
   end
 
   def is_fan(person, artist)
-    person and person.fanned_artists.include? artist
+    person and person.is_a? Person and person.fanned_artists.include? artist
   end
 
   def fan_link(person, artist)
