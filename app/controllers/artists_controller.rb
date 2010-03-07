@@ -40,6 +40,13 @@ class ArtistsController < ApplicationController
     @artist = Artist.new(params[:artist])
     @artist.members << current_person
 
+    addresses = params[:addresses]
+    if addresses
+      addresses.split.each do |email|
+        @artist.artist_invites << ArtistInvite.new(:email => email, :artist => @artist)
+      end
+    end
+
     respond_to do |format|
       if @artist.save
         format.html { redirect_to(@artist) }

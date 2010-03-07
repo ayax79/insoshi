@@ -1,13 +1,4 @@
-class PersonMailer < ActionMailer::Base
-  extend PreferencesHelper
-  
-  def domain
-    @domain ||= PersonMailer.global_prefs.domain
-  end
-  
-  def server
-    @server_name ||= PersonMailer.global_prefs.server_name
-  end
+class PersonMailer < BaseMailer
   
   def password_reminder(person)
     from         "Password reminder <password-reminder@#{domain}>"
@@ -63,16 +54,4 @@ class PersonMailer < ActionMailer::Base
                  "code" => ev.code
   end
   
-  private
-  
-    # Prepend the application name to subjects if present in preferences.
-    def formatted_subject(text)
-      name = PersonMailer.global_prefs.app_name
-      label = name.blank? ? "" : "[#{name}] "
-      "#{label}#{text}"
-    end
-  
-    def preferences_note(person)
-      %(To change your email notification preferences, visit http://#{server}/people/#{person.to_param}/edit#email_prefs)
-    end
 end
