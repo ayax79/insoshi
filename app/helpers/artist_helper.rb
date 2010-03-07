@@ -1,16 +1,16 @@
 module ArtistHelper
 
-  def is_member(current_person, artist)
-    !current_person and current_person.membered_artists.include? artist
+  def is_member(person, artist)
+    person and person.membered_artists.include? artist
   end
 
-  def is_fan(current_person, artist)
-    !current_person and current_person.fanned_artists.include? artist
+  def is_fan(person, artist)
+    person and person.fanned_artists.include? artist
   end
 
-  def fan_link(current_person, artist)
-    unless is_member(current_person, artist) or
-            is_fan(current_person, artist)
+  def fan_link(person, artist)
+    unless is_member(person, artist) or
+            is_fan(person, artist)
       link_to 'Become a Fan', { :controller => 'artists', :action => 'fan', :id => artist }
     end
   end
