@@ -31,8 +31,8 @@ describe ArtistsController do
     artist_hash = { :name => "another band", :bio => "yes this band sucks too" }
     post :create, :artist => artist_hash
     assigns(:artist).members.should contain(person)
-    assigns(:artist).bio.should eql("yes this band sucks too")
-    assigns(:artist).name.should eql("another band")
+    assigns(:artist).bio.should == "yes this band sucks too"
+    assigns(:artist).name.should == "another band"
 
     response.should redirect_to(artist_url(assigns(:artist)))
   end
