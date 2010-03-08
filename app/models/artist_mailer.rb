@@ -6,7 +6,7 @@ class ArtistMailer < BaseMailer
     from       "Message notification <message@#{domain}>"
     body       :artist => artist,
                :person => person,
-               :artist_url => artist_url(artist)
+               :login_url => login_url
   end
 
 
