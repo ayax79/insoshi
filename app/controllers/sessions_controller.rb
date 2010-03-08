@@ -8,60 +8,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if using_open_id?
-      open_id_authentication(params[:openid_url])
-    else
-      # Protect against bots hitting us.
-      if params[:email].nil? or params[:password].nil?
-        render :text => "" and return
-      end
-      password_authentication(params[:email], params[:password])
+    # Protect against bots hitting us.
+    if params[:email].nil? or params[:password].nil?
+      render :text => "" and return
     end
-  end
-
-  def open_id_authentication(openid_url)
-    authenticate_with_open_id(openid_url, :required => [:nickname, :email]) do |result, identity_url, registration|
-      if !result.successful?
-        failed_login result.message
-      else
-        @person = Person.find_or_initialize_by_identity_url(identity_url)
-        if @person.new_record?
-          @person.email_verified = false if global_prefs.email_verifications?
-          @person.name = registration['nickname']
-          @person.email = registration['email']
-
-          @person.save
-          if !@person.errors.empty?
-            err_message = "The following problems exist with your OpenID profile:<br>"
-            @person.errors.each do |attr,val|
-              logger.warn "open_id_authentication() Error: #{attr}:#{val}"
-              err_message += "#{attr}: #{val}<br>"
-            end
- 
-            flash[:error] = err_message.chop
-            @body = "login single-col"
-            session[:verified_identity_url] = identity_url
-            render :partial => "shared/personal_details.html.erb", :object => @person, :layout => 'application'
-          elsif global_prefs.email_verifications?
-            @person.email_verifications.create
-            flash[:notice] = %(Thanks for signing up! Check your email
-                               to activate your account.)
-            redirect_to(home_url)
-          else
-            successful_login("Thanks for signing up!")
-          end
-
-          return
-        end # if new record
-
-        if @person.deactivated?
-          flash[:error] = "Your account has been deactivated"
-          redirect_to home_url and return
-        end
-
-        successful_login
-      end
-    end
+    password_authentication(params[:email], params[:password])
   end
 
   def failed_login(message = "Authentication failed.")
@@ -69,14 +20,14 @@ class SessionsController < ApplicationController
     flash.now[:error] = message
     render :action => 'new'
   end
-  
+
   def successful_login(message = "Logged in successfully")
     self.current_person = @person
     if params[:remember_me] == "1"
       current_person.remember_me
       cookies[:auth_token] = {
-        :value => current_person.remember_token,
-        :expires => current_person.remember_token_expires_at }
+              :value => current_person.remember_token,
+              :expires => current_person.remember_token_expires_at }
     end
     redirect_back_or_default('/')
     flash[:notice] = message
@@ -88,8 +39,8 @@ class SessionsController < ApplicationController
       if person.deactivated?
         flash[:error] = "Your account has been deactivated"
         redirect_to home_url and return
-      elsif global_prefs.email_verifications? and 
-            not person.email_verified? and not person.admin?
+      elsif global_prefs.email_verifications? and
+              not person.email_verified? and not person.admin?
         flash[:notice] = %(Unverified email address. 
                            Please check your email for your activation code.)
         redirect_to login_url and return
@@ -106,8 +57,8 @@ class SessionsController < ApplicationController
       if params[:remember_me] == "1"
         current_person.remember_me
         cookies[:auth_token] = {
-          :value => current_person.remember_token,
-          :expires => current_person.remember_token_expires_at }
+                :value => current_person.remember_token,
+                :expires => current_person.remember_token_expires_at }
       end
       flash[:success] = "Logged in successfully"
       if @first_admin_login

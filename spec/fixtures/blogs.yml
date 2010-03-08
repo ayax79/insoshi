@@ -10,3 +10,5 @@ five:
   person: deactivated
 six:
   person: email_unverified
+seven:
+  person: bob

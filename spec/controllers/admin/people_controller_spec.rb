@@ -24,12 +24,6 @@ describe Admin::PeopleController do
     response.should be_success
   end
   
-  it "should have a warning for an example.com email address" do
-    login_as(:admin)
-    get :index
-    response.should have_tag("p[class=?]", "flash notice", /Warning/)
-  end
-  
   describe "person modifications" do
     
     before(:each) do
