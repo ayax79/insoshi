@@ -160,6 +160,14 @@ module ApplicationHelper
     link_to artist.name, :controller => "artists", :action => "show", :id => artist.name
   end
 
+  def accept_artist_link(invite)
+    link_to 'Yes', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => true
+  end
+  
+  def deny_artist_link(invite)
+    link_to 'No', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => false
+  end
+
   private
 
   def inflect(word, number)

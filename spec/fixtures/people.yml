@@ -39,7 +39,19 @@ kelly:
   message_notifications: true
   wall_comment_notifications: true
   blog_comment_notifications: true
-  
+
+bob:
+  email: bob@example.com
+  name: Bob
+  description: I'm Bob
+  crypted_password: <%= password %>
+  created_at: <%= 1.day.ago.to_s :db %>
+  deactivated: false
+  connection_notifications: true
+  message_notifications: true
+  wall_comment_notifications: true
+  blog_comment_notifications: true
+
 admin:
   email: admin@example.com
   name: admin

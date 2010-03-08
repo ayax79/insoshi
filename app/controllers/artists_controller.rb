@@ -66,5 +66,32 @@ class ArtistsController < ApplicationController
     end
   end
 
+  def accept_member_invite
+    @invite = ArtistInvite.find(params[:id])
+    @accept = params[:accept]
+    @artist = @invite.artist
+    @person = current_person
+
+    if @invite.email == @person.email
+      @invite.delete
+      if @accept
+        @artist.members << @person
+        @artist.save!
+        flash[:artist_invite] = "You have a successfully been added a member"
+      else
+        flash[:artist_invite] = "You have denied the membership request" 
+      end
+    end
+
+    respond_to do |format|
+      if @accept
+        format.html { redirect_to :action => 'show', :id => @artist}
+      else
+        format.html { redirect_to :home }
+      end
+    end
+
+  end
+
 end
 

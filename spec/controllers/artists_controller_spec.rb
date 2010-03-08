@@ -46,4 +46,15 @@ describe ArtistsController do
     assigns(:artist).fans.should contain(person)
   end
 
+  it "should have an accept_member_invite action" do
+    person = login_as(:bob)
+    invite = @artist.artist_invites[0]
+    get :accept_member_invite, :id => invite, :accept => true
+    flash[:artist_invite].should_not be_nil
+    assigns(:person).should == person
+    assigns(:artist).members.should contain(person)
+    assigns(:accept).should be_true
+    response.should redirect_to(artist_url(assigns(:artist)))
+  end
+
 end

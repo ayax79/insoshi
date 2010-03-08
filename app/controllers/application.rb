@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   before_filter :create_page_view, :require_activation, :tracker_vars,
-                :admin_warning
+                :admin_warning, :find_artist_invites
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -73,4 +73,15 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+
+
+    def find_artist_invites
+      if logged_in?
+        invites = ArtistInvite.find_all_by_email current_person.email
+        unless invites.nil? or invites.empty?
+          flash[:artist_invites] = invites
+        end
+      end
+    end
+
 end
