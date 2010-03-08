@@ -6,7 +6,7 @@ class ArtistMailer < BaseMailer
     from       "Message notification <message@#{domain}>"
     body       :artist => artist,
                :person => person,
-               :artist_url => artist_url(artist, :host => domain)
+               :artist_url => artist_url(artist)
   end
 
 
@@ -15,7 +15,7 @@ class ArtistMailer < BaseMailer
     recipients email
     from       "Message notification <message@#{domain}>"
     body       :artist => artist,
-               :signup_url => signup_url(:host => domain)
+               :signup_url => signup_url
   end
 
 end
