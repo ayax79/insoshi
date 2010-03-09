@@ -36,7 +36,7 @@
     <%- if logged_in? -%>
         <%- unless is_member(current_person, @artist) or is_fan(current_person, @artist) -%>
             <li><%= link_to "Become a Fan",
-                            artist_connections_path(@artist),
+                            link_path(:action => 'fan', :id => @artist),
                             :method => :post %></li>
         <%- end -%>
         <%- if is_fan(current_person, @artist) -%>
