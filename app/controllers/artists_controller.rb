@@ -2,10 +2,11 @@ class ArtistsController < ApplicationController
   include ArtistHelper
 
   before_filter :login_required, :except => [:index, :show]
+  before_filter :member_required, :only => [:edit, :update]
 
   def index
     @artists = Artist.all
-    @current_person = current_person
+    current_person
 
     respond_to do |format|
       format.html
@@ -39,13 +40,7 @@ class ArtistsController < ApplicationController
   def create
     @artist = Artist.new(params[:artist])
     @artist.members << current_person
-
-    addresses = params[:addresses]
-    if addresses
-      addresses.split.each do |email|
-        @artist.artist_invites << ArtistInvite.new(:email => email, :artist => @artist)
-      end
-    end
+    add_invites
 
     respond_to do |format|
       if @artist.save
@@ -54,6 +49,25 @@ class ArtistsController < ApplicationController
         format.html { render :action => 'new'}
       end
     end
+  end
+
+  def edit
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def update
+    add_invites
+    respond_to do |format|
+      if @artist.update_attributes(params[:user])
+        flash[:notice] = 'Artist was succesfully updated'
+        format.html { redirect_to @artist }
+      else
+        format.html { render :action => :edit}
+      end
+    end
+
   end
 
   def fan
@@ -79,7 +93,7 @@ class ArtistsController < ApplicationController
         @artist.save!
         flash[:artist_invite] = "You have a successfully been added a member"
       else
-        flash[:artist_invite] = "You have denied the membership request" 
+        flash[:artist_invite] = "You have denied the membership request"
       end
     end
 
@@ -91,6 +105,22 @@ class ArtistsController < ApplicationController
       end
     end
 
+  end
+
+  protected
+
+  def add_invites
+    addresses = params[:addresses]
+    if addresses
+      addresses.split.each do |email|
+        @artist.artist_invites << ArtistInvite.new(:email => email, :artist => @artist)
+      end
+    end
+  end
+
+  def member_required
+    @artist = Artist.find(params[:id])
+    is_member current_person, @artist
   end
 
 end

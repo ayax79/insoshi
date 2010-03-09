@@ -156,8 +156,8 @@ module ApplicationHelper
     end
   end
 
-  def artist_link(artist) 
-    link_to artist.name, :controller => "artists", :action => "show", :id => artist.name
+  def artist_link(artist, name=nil)
+    link_to name.nil? ? artist.name : name, :controller => "artists", :action => "show", :id => artist.name
   end
 
   def accept_artist_link(invite)

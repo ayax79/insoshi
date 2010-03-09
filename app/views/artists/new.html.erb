@@ -1,21 +1,2 @@
 <h2>New Artist Creation</h2>
-
-<% form_for @artist do |f| %>
-
-    <div class="form_row">
-      <%= f.label :name, 'Name' %>
-      <%= f.text_field :name %>
-    </div>
-    <div class="form_row">
-      <%= f.label :bio, 'Bio' %>
-      <%= f.text_area :bio, :cols => 60, :rows => 20 %>
-    </div>
-    <div class="form_row">
-      <%= label_tag 'addresses', 'Invite Other Members (email addresses, whitespace seperated)' %>
-      <%= text_area_tag 'addresses', nil, :cols => 60, :rows => 10 %>
-    </div>
-    <div class="form_row">
-      <%= f.submit 'Create' %>
-    </div>
-    
-<% end %>
+<%= render :partial => 'artist_form', :locals =>{:btn_message => 'Create', :allow_canel => false} %>

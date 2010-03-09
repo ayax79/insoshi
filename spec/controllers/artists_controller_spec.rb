@@ -27,16 +27,18 @@ describe ArtistsController do
   end
 
   it "should be able to create new artists" do
-    person = login_as(:quentin)
-    artist_hash = { :name => "another band", :bio => "yes this band sucks too" }
-    post :create, :artist => artist_hash, :addresses => ' foo1@bar.com foo2.bar.com '
-    assigns(:artist).members.should contain(person)
-    assigns(:artist).bio.should == "yes this band sucks too"
-    assigns(:artist).name.should == "another band"
-    assigns(:artist).artist_invites.should_not be_nil
-    assigns(:artist).artist_invites.size.should == 2
+    lambda do
+      person = login_as(:quentin)
+      artist_hash = { :name => "another band", :bio => "yes this band sucks too" }
+      post :create, :artist => artist_hash, :addresses => ' foo1@bar.com foo2.bar.com '
+      assigns(:artist).members.should contain(person)
+      assigns(:artist).bio.should == "yes this band sucks too"
+      assigns(:artist).name.should == "another band"
+      assigns(:artist).artist_invites.should_not be_nil
+      assigns(:artist).artist_invites.size.should == 2
 
-    response.should redirect_to(artist_url(assigns(:artist)))
+      response.should redirect_to(artist_url(assigns(:artist)))
+    end.should change(Artist, :count).by(1)
   end
 
   it "should have a working fan link" do
@@ -55,6 +57,22 @@ describe ArtistsController do
     assigns(:artist).members.should contain(person)
     assigns(:accept).should be_true
     response.should redirect_to(artist_url(assigns(:artist)))
+  end
+
+  it "should have an edit page" do
+    login_as(:quentin)
+    get :edit, :id => @artist
+    response.should render_template("edit")
+  end
+
+  it "should handle update" do
+    lambda do
+      login_as(:quentin)
+      new_bio = "adflasjdfasldfkj"
+      post :update, :artist => { :bio => new_bio }, :addresses => 'another@foo.com', :id => @artist  
+      response.should redirect_to(artist_url(assigns(:artist)))
+      assigns(:artist).bio == new_bio
+    end.should change(ArtistInvite, :count).by(1)
   end
 
 end

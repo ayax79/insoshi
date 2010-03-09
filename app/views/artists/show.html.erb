@@ -1,19 +1,16 @@
-<h1><%= @artist.name %></h1>
+<h2><%= @artist.name %></h2>
+
+<% if is_member(@current_person, @artist) %>
+    <div class="edit">
+    <%= link_to 'Edit', :action => 'edit', :id => @artist %>
+    </div>
+<% end %>
 
 <div class="artist-bio">
   <%= @artist.bio %>
 </div>
 
-<% unless @artist.members.empty? %>
-    <div id="artist-members-list">
-      <div id="members-title">Members (<span class="artist-member-count"><%= @artist.members.size %></span>):</div>
-      <ul>
-        <% @artist.members.each do |member| %>
-            <li><%= link_to member.name, member %></li>
-        <% end %>
-      </ul>
-    </div>
-<% end %>
+<%= render :partial => 'members' %>
 
 <% unless @artist.fans.empty? %>
     <div id="artist-fans-list">

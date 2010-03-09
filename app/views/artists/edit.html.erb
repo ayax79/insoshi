@@ -1,0 +1,12 @@
+<h2>Edit <%= @artist.name %></h2>
+<%= render :partial => 'artist_form', :locals => { :btn_message => 'Update', :allow_cancel => true } %>
+<%= render :partial => 'members' %>
+
+<% unless @artist.artist_invites.empty? %>
+    <div class="invitations">
+      <h2>Unaccepted invitations (<%= @artist.artist_invites.size %>) </h2>
+      <% @artist.artist_invites.each do |invite| %>
+          <div class="invitation"><%= invite.email %></div>
+      <% end %>
+    </div>
+<% end %>

@@ -1,0 +1,23 @@
+<% form_for @artist do |f| %>
+    <%= f.error_messages %>
+
+    <div class="form_row">
+      <%= f.label :name, 'Name' %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="form_row">
+      <%= f.label :bio, 'Bio' %>
+      <%= f.text_area :bio, :cols => 60, :rows => 20 %>
+    </div>
+    <div class="form_row">
+      <%= label_tag 'addresses', 'Invite Other Members (email addresses, whitespace seperated)' %>
+      <%= text_area_tag 'addresses', nil, :cols => 60, :rows => 10 %>
+    </div>
+    <div class="form_row">
+      <%= f.submit btn_message %>
+      <% if allow_cancel %>
+        <%= artist_link @artist, 'Cancel' %> 
+      <% end %>
+    </div>
+
+<% end %>

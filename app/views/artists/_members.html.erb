@@ -1,0 +1,10 @@
+<% unless @artist.members.empty? %>
+    <div id="artist-members-list">
+      <h2>Members (<span class="artist-member-count"><%= @artist.members.size %></span>)</h2>
+      <ul>
+        <% @artist.members.each do |member| %>
+            <li><%= link_to member.name, member %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
