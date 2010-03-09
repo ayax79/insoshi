@@ -5,7 +5,7 @@ class ArtistsController < ApplicationController
   before_filter :member_required, :only => [:edit, :update]
 
   def index
-    @artists = Artist.all
+    @artists = Artist.paginate(:all, :page => params[:page], :order => :name)
     current_person
 
     respond_to do |format|

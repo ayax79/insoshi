@@ -1,9 +1,15 @@
-<h1>Artists</h1>
-
-<div id="artist-list">
-  <ul>
-    <% @artists.each do |artist| %>
-        <li><%= artist_link artist %></li>
+<% column_div :type => :primary do %>
+    <% unless @artists.empty? %>
+        <h2>Artists</h2>
+        <%= will_paginate %>
+        <ul class="list artists">
+          <%= render :partial => @artists %>
+        </ul>
+        <%= will_paginate %>
     <% end %>
-  </ul>
-</div>
+<% end %>
+
+<% column_div :type => :secondary do %>
+    <%= render :partial => 'searches/box' %>
+    <%= render :partial => 'shared/minifeed' %>
+<% end %>

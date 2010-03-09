@@ -1,0 +1,9 @@
+<li class="vcard artist">
+  <div class="profile-image">
+    <%= image_link artist, :class => "photo", :image => :thumbnail %>
+  </div>
+  <p><%= artist_link artist, :class => "url fn" %></p>
+  <%= display(truncate(artist.description, :length => 150),
+              :class => "note") %>
+  <div class="clear"></div>
+</li>

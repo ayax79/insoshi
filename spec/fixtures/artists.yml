@@ -1,5 +1,5 @@
 foobars:
   name: foobars
-  bio: We are a band and we suck.
+  description: We are a band and we suck.
   members: quentin, aaron
   fans: kelly, admin

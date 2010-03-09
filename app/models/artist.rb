@@ -7,4 +7,10 @@ class Artist < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  #photo helpers
+
+  def thumbnail
+    "default_thumbnail.png"
+  end
+
 end

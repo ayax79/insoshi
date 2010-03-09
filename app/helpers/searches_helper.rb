@@ -12,6 +12,8 @@ module SearchesHelper
       "Forums" 
     elsif params[:controller] == "messages" or params[:model] == "Message"
       "Messages"
+    elsif params[:controller] == "artists" or params[:model] == "Artist"
+      "Artists"
     else
       "People"
     end
