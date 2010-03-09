@@ -1,0 +1,4 @@
+<h2><%= @artist.name %>'s Members</h2>
+<%= render :partial => 'shared/contacts_grid',
+           :locals => { :contacts => @artist.members } %>
+<div class="clear"></div>

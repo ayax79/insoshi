@@ -1,26 +1,26 @@
-<h2><%= @artist.name %></h2>
+<div id="profile" style="display: none;">
+  <%- tabs = TabsRenderer.new(self, :id => "tabCol") -%>
+  <%- tabs.create('tProfile', 'Profile', :class => "profile vcard") do -%>
+      <%= render :partial => 'profile' -%>
+      <div class="clear"></div>
+  <%- end -%>
 
-<% if is_member(@current_person, @artist) %>
-    <div class="edit">
-    <%= link_to 'Edit', :action => 'edit', :id => @artist %>
-    </div>
-<% end %>
+  <%- tabs.create('tMembers', 'Members') do -%>
+      <%= render :partial => 'profile_members' -%>
+      <div class="clear"></div>
+  <%- end -%>
 
-<div class="artist-bio">
-  <%= @artist.description %>
+  <%- tabs.create('tFans', 'Fans') do -%>
+      <%= render :partial => 'profile_fans' -%>
+      <div class="clear"></div>
+  <%- end -%>
+
+  <%= tabs.render -%>
 </div>
-
-<%= render :partial => 'members' %>
-
-<% unless @artist.fans.empty? %>
-    <div id="artist-fans-list">
-      <div id="fans-title">Fans (<span class="artist-fan-count"><%= @artist.fans.size %></span>):</div>
-      <ul>
-        <% @artist.fans.each do |fan| %>
-            <li><%= link_to fan.name, fan %></li>
-        <% end %>
-      </ul>
-    </div>
-<% end %>
-
-<%= fan_link @current_person, @artist %>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        // Set up the tabs.
+        $("#tabCol > ul").tabs();
+        $("#profile").show();
+    })
+</script>

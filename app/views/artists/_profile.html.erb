@@ -1,0 +1,54 @@
+<h2><span class="fn n"><%= @artist.name %></span>'s Profile</h2>
+<%- if current_person?(@artist) || current_person.admin? -%>
+    <div class="button_container">
+<%- end -%>
+<%- if current_person.admin? -%>
+    <%- activity = activated_status(@artist) -%>
+    <%= link_to activity,
+                admin_artist_path(@artist, :task => "deactivated"),
+                :method => :put %>
+    <%= "|" if current_person?(@artist) %>
+<%- end -%>
+<%- if current_person?(@artist) -%>
+    <%= link_to "Edit profile", edit_artist_path(@artist) %> |
+    <%= link_to "Change photo", @artist.galleries.first %>
+<%- end -%>
+<%- if current_person?(@artist) || current_person.admin? -%>
+    <div class="clear"></div>
+    </div>
+<%- end -%>
+<%- if admin? and not @artist.active? -%>
+    <p class="error">This artist is not active</p>
+<%- end -%>
+<%- if current_person?(@artist) && current_person.description.blank? -%>
+    <div class="error">
+      Your description is blank.
+      <%= link_to "Click here to add a description",
+                  edit_artist_path(@artist) %>
+    </div>
+<%- end -%>
+
+<div class="toolbox">
+  <%= image_tag @artist.main_photo, :class => "profile-image photo",
+                :alt => h(@artist.name) %>
+  <h3><%= @artist.name %></h3>
+  <ul class="tools">
+    <%- if logged_in? -%>
+        <%- unless is_member(current_person, @artist) or is_fan(current_person, @artist) -%>
+            <li><%= link_to "Become a Fan",
+                            artist_connections_path(@artist),
+                            :method => :post %></li>
+        <%- end -%>
+        <%- if is_fan(current_person, @artist) -%>
+            <li>You're a fan!
+              <%= link_to image_tag('icons/user_delete.png'),
+                          alert('todo'),
+                          :method => :delete,
+                          :title => "Stop being a fan",
+                          :confirm => "Are you sure you want to stop being a fan?" %>
+            </li>
+        <%- end -%>
+    <%- end -%>
+  </ul>
+</div>
+<%= display @artist.description %>

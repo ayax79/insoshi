@@ -1,0 +1,9 @@
+<h2><%= @artist.name %>'s Fans</h2>
+<% if @artist.fans.count > Artist::MAX_DEFAULT_CONTACTS %>
+    <div class='button see_all_link'>
+      <%= link_to "See All Fans", 'alert("todo")' %>
+    </div>
+<% end %>
+<%= render :partial => 'shared/contacts_grid',
+           :locals => { :contacts => @artist.fans } %>
+<div class="clear"></div>
