@@ -170,6 +170,9 @@ module ActivitiesHelper
         event = activity.item.event
         %(#{person_link(person)} is attending
         #{someones(event.person, person)} #{event_link("event", event)}.)
+      when "Artist"
+        artist = activity.artist
+        %(#{artist_link(artist)}'s description changed)
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
