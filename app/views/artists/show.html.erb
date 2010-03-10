@@ -15,6 +15,11 @@
       <div class="clear"></div>
   <%- end -%>
 
+  <% tabs.create('tRecentActivity', 'Recent Activity') do %>
+    <%= render :partial => 'recent_activity' %>
+    <div class="clear"></div>
+  <% end %>
+
   <%= tabs.render -%>
 </div>
 <script type='text/javascript'>

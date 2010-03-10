@@ -1,0 +1,19 @@
+<%- if @artist.recent_activity.empty? -%>
+  <h2>No recent activity</h2>
+<%- else -%>
+  <h2><%= @artist.name %>'s Recent Activity</h2>
+
+  <%- unless @artist.last_logged_in_at.nil? or current_person?(@artist) -%>
+    <p class="meta">
+      <%= @artist.name %> last logged in 
+      <%= time_ago_in_words(@artist.last_logged_in_at) %> ago
+    </p>    
+  <%- end -%>
+  
+  <ul class="list activity">
+     <%= render :partial => 'shared/activity',
+                :collection => @artist.recent_activity,
+                :locals => { :destroy => current_person?(@artist),
+                             :recent => true } %>
+  </ul>
+<%- end -%>
