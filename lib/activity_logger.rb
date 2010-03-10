@@ -27,6 +27,7 @@ module ActivityLogger
 
     people_ids = people_to_add(entity, activity, include_person)
     do_feed_insert(people_ids, activity.id) unless people_ids.empty?
+    do_artist_feed_insert(entity.id, activity.id) if entity.is_a? Artist
   end
 
   private
@@ -75,4 +76,10 @@ module ActivityLogger
               VALUES #{values(people_ids, activity_id)})
     ActiveRecord::Base.connection.execute(sql)
   end
+
+  def do_artist_feed_insert(artist_id, activity_id)
+    sql = "INSERT INTO feeds (artist_id, activity_ID) VALUES (#{artist_id}, #{activity_id})"
+    ActiveRecord::Base.connection.execute(sql)
+  end
+
 end

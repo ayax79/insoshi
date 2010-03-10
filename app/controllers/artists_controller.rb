@@ -60,7 +60,7 @@ class ArtistsController < ApplicationController
   def update
     add_invites
     respond_to do |format|
-      if @artist.update_attributes(params[:user])
+      if @artist.update_attributes(params[:artist])
         flash[:notice] = 'Artist was succesfully updated'
         format.html { redirect_to @artist }
       else
