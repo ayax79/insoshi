@@ -122,6 +122,7 @@ class Person < ActiveRecord::Base
   after_update :log_activity_description_changed
   before_destroy :destroy_activities, :destroy_feeds
 
+
   has_and_belongs_to_many :membered_artists, :class_name => 'Artist', :join_table => 'artists_members'
   has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
 

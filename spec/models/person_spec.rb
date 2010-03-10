@@ -25,7 +25,7 @@ describe Person do
       p = create_person(:email => nil)
       p.errors.on(:email).should_not be_nil
     end
-    
+
     it "should prevent duplicate email addresses using a unique key" do
       create_person(:save => true)
       duplicate = create_person
@@ -43,22 +43,22 @@ describe Person do
     it "should strip spaces in email field" do
       create_person(:email => 'example@example.com ').should be_valid
     end
-    
+
     it "should allow a plus sign in the email address" do
       create_person(:email => 'foo+bar@example.com').should be_valid
     end
-    
+
     it "should be valid even with a nil description" do
       p = create_person(:description => nil)
       p.should be_valid
     end
   end
-  
+
   describe "length validations" do
     it "should enforce a maximum name length" do
       @person.should have_maximum(:name, Person::MAX_NAME)
     end
-    
+
     it "should enforce a maximum description length" do
       @person.should have_maximum(:description, Person::MAX_DESCRIPTION)
     end
@@ -88,16 +88,6 @@ describe Person do
       person.destroy
       Activity.find_all_by_person_id(person).should be_empty
       Feed.find_all_by_person_id(person).should be_empty
-    end
-
-    it "should disappear from other feeds if the person is destroyed" do
-      initial_person = create_person(:save => true)
-      person         = create_person(:email => "new@foo.com", :name => "Foo",
-                                     :save => true)
-      Connection.connect(person, initial_person)
-      initial_person.activities.length.should == 1
-      person.destroy
-      initial_person.reload.activities.length.should == 0
     end
   end
 
@@ -153,7 +143,7 @@ describe Person do
       Connection.connect(@person, contact)
       @person.contacts.should contain(contact)
       enable_email_notifications
-      contact.email_verified = false ; contact.save!
+      contact.email_verified = false; contact.save!
       @person.reload.contacts.should_not contain(contact)
     end
   end
@@ -202,19 +192,19 @@ describe Person do
         common_contacts = @person.common_contacts_with(@kelly)
         common_contacts.should be_empty
       end
-      
+
       it "should exclude email unverified people from common contacts" do
         enable_email_notifications
         @contact.email_verified = false; @contact.save!
         common_contacts = @person.common_contacts_with(@kelly)
         common_contacts.should be_empty
       end
-      
+
       it "should exclude the person being viewed" do
         Connection.connect(@person, @kelly)
         @person.common_contacts_with(@kelly).should_not contain(@kelly)
       end
-      
+
       it "should exclude the person doing the viewing" do
         Connection.connect(@person, @kelly)
         @person.common_contacts_with(@kelly).should_not contain(@person)
@@ -273,7 +263,7 @@ describe Person do
     it "should have received messages" do
       @person.received_messages.should_not be_nil
     end
-    
+
     it "should have unread messages" do
       @person.has_unread_messages?.should be_true
     end
@@ -392,7 +382,7 @@ describe Person do
       @person.toggle(:deactivated)
       @person.should_not be_deactivated
     end
-    
+
     it "should have nil email verification" do
       person = create_person
       person.email_verified.should be_nil
@@ -407,28 +397,28 @@ describe Person do
       @person.should be_active
     end
   end
-  
+
   describe "mostly active" do
     it "should include a recently logged-in person" do
       Person.mostly_active.should contain(@person)
     end
-    
+
     it "should not include a deactivated person" do
       @person.toggle!(:deactivated)
       Person.mostly_active.should_not contain(@person)
     end
-    
+
     it "should not include an email unverified person" do
       enable_email_notifications
       @person.email_verified = false; @person.save!
-      Person.mostly_active.should_not contain(@person)      
+      Person.mostly_active.should_not contain(@person)
     end
-    
+
     it "should not include a person who has never logged in" do
       @person.last_logged_in_at = nil; @person.save
       Person.mostly_active.should_not contain(@person)
     end
-    
+
     it "should not include a person who logged in too long ago" do
       @person.last_logged_in_at = Person::TIME_AGO_FOR_MOSTLY_ACTIVE - 1
       @person.save
@@ -454,7 +444,7 @@ describe Person do
       @person.should_not be_last_admin
     end
   end
-  
+
   describe "active class methods" do
     it "should not return deactivated people" do
       @person.toggle!(:deactivated)
@@ -462,7 +452,7 @@ describe Person do
         Person.send(method).should_not contain(@person)
       end
     end
-    
+
     it "should not return email unverified people" do
       @person.email_verified = false
       @person.save!
@@ -479,17 +469,17 @@ describe Person do
       @person.membered_artists.should contain(artists(:foobars))
     end
   end
-    
+
   protected
 
-    def create_person(options = {})
-      record = Person.new({ :email => 'quire@example.com',
-                            :password => 'quire',
-                            :password_confirmation => 'quire',
-                            :name => 'Quire',
-                            :description => 'A new person' }.merge(options))
-      record.valid?
-      record.save! if options[:save]
-      record
-    end
+  def create_person(options = {})
+    record = Person.new({ :email => 'quire@example.com',
+                          :password => 'quire',
+                          :password_confirmation => 'quire',
+                          :name => 'Quire',
+                          :description => 'A new person' }.merge(options))
+    record.valid?
+    record.save! if options[:save]
+    record
+  end
 end

@@ -46,18 +46,10 @@ describe Activity do
     Activity.global_feed.should_not be_empty
   end
   
-  it "should not show activities for users who are inactive" do
-    @person.activities.collect(&:person).should include(@commenter)
-    @commenter.toggle!(:deactivated)
-    @commenter.should be_deactivated
-    Activity.global_feed.should be_empty
-    @person.reload
-    @person.activities.collect(&:person).should_not include(@commenter)
-  end
-  
   it "should not show activities for users who are email unverified" do
+    old_feed_size = Activity.global_feed.size
     @commenter.email_verified = false; @commenter.save!
-    Activity.global_feed.should be_empty
+    Activity.global_feed.size.should == old_feed_size
   end
   
   private

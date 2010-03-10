@@ -51,4 +51,43 @@ describe Artist do
     a
   end
 
+  describe "activity associations" do
+
+    it "should log an activity if description changed" do
+      @artist.update_attributes(:description => "New Description")
+      activity = Activity.find_by_item_id(@artist)
+      Activity.global_feed.should contain(activity)
+    end
+#
+#    it "should not log an activity if description didn't change" do
+#      @artist.save!
+#      activity = Activity.find_by_item_id(@artist)
+#      Activity.global_feed.should_not contain(activity)
+#    end
+#
+#    it "should disappear if the person is destroyed" do
+#      person = create_person(:save => true)
+#      # Create a feed activity.
+#
+#
+#      Connection.connect(person, @artist)
+#      @artist.update_attributes(:name => "New name")
+#
+#      Activity.find_all_by_person_id(person).should_not be_empty
+#      person.destroy
+#      Activity.find_all_by_person_id(person).should be_empty
+#      Feed.find_all_by_person_id(person).should be_empty
+#    end
+#
+#    it "should disappear from other feeds if the person is destroyed" do
+#      initial_person = create_person(:save => true)
+#      person         = create_person(:email => "new@foo.com", :name => "Foo",
+#                                     :save => true)
+#      Connection.connect(person, initial_person)
+#      initial_person.activities.length.should == 1
+#      person.destroy
+#      initial_person.reload.activities.length.should == 0
+#    end
+  end
+
 end
