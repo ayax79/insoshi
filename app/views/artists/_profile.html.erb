@@ -1,4 +1,5 @@
-<h2><span class="fn n"><%= @artist.name %></span>'s Profile</h2>
+<h2><span class="fn n"><%= @artist.name %></span>'s Profile
+  <%- if is_member(current_person, @artist) -%><%= link_to '(Edit)', edit_artist_path(@artist) %><%- end -%></h2>
 
 <div class="toolbox">
   <%= image_tag @artist.main_photo, :class => "profile-image photo",
