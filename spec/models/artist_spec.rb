@@ -19,9 +19,9 @@ describe Artist do
     @artist.name.should eql('foobars')
   end
 
-  it "should have the correct bio" do
-    @artist.bio.should_not be_nil
-    @artist.bio.should eql('We are a band and we suck.')
+  it "should have the correct description" do
+    @artist.description.should_not be_nil
+    @artist.description.should eql('We are a band and we suck.')
   end
 
   it "should have members" do

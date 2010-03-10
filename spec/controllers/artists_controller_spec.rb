@@ -29,10 +29,10 @@ describe ArtistsController do
   it "should be able to create new artists" do
     lambda do
       person = login_as(:quentin)
-      artist_hash = { :name => "another band", :bio => "yes this band sucks too" }
+      artist_hash = { :name => "another band", :description => "yes this band sucks too" }
       post :create, :artist => artist_hash, :addresses => ' foo1@bar.com foo2.bar.com '
       assigns(:artist).members.should contain(person)
-      assigns(:artist).bio.should == "yes this band sucks too"
+      assigns(:artist).description.should == "yes this band sucks too"
       assigns(:artist).name.should == "another band"
       assigns(:artist).artist_invites.should_not be_nil
       assigns(:artist).artist_invites.size.should == 2
@@ -68,10 +68,10 @@ describe ArtistsController do
   it "should handle update" do
     lambda do
       login_as(:quentin)
-      new_bio = "adflasjdfasldfkj"
-      post :update, :artist => { :bio => new_bio }, :addresses => 'another@foo.com', :id => @artist  
+      new_description = "adflasjdfasldfkj"
+      post :update, :artist => { :description => new_description }, :addresses => 'another@foo.com', :id => @artist  
       response.should redirect_to(artist_url(assigns(:artist)))
-      assigns(:artist).bio == new_bio
+      assigns(:artist).description == new_description
     end.should change(ArtistInvite, :count).by(1)
   end
 
