@@ -35,6 +35,11 @@ class Artist < ActiveRecord::Base
     "default.png"
   end
 
+  def recent_activity
+    Activity.find_all_by_artist_id(self, :order => 'created_at DESC',
+                                         :limit => FEED_SIZE)
+  end
+
   protected
 
   def set_old_description
