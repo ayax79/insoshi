@@ -19,6 +19,8 @@ class Artist < ActiveRecord::Base
   before_update :set_old_description
   after_update :log_activity_description_changed
 
+  before_save :set_old_fans_members
+
   #photo helpers
 
   def thumbnail
@@ -35,9 +37,19 @@ class Artist < ActiveRecord::Base
     "default.png"
   end
 
+  def photo
+    # This should only have one entry, but use 'first' to be paranoid.
+    #photos.find_all_by_avatar(true).first
+    nil
+  end
+
+  def icon
+    photo.nil? ? "default_icon.png" : photo.public_filename(:icon)
+  end
+
   def recent_activity
     Activity.find_all_by_artist_id(self, :order => 'created_at DESC',
-                                         :limit => FEED_SIZE)
+                                   :limit => FEED_SIZE)
   end
 
   protected
@@ -45,6 +57,13 @@ class Artist < ActiveRecord::Base
   def set_old_description
     @old_description = Artist.find(self).description
   end
+
+  def set_old_fans_members
+    artist = Artist.find(self)
+    @old_fans = artist.fans
+    @old_members = artist.members
+  end
+
 
   def log_activity_description_changed
     unless @old_description == description or description.blank?
