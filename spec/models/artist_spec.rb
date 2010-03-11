@@ -27,10 +27,11 @@ describe Artist do
   it "should have members" do
     @artist.members.should be_a_kind_of(Array)
     @artist.members.should have(2).items
-    @artist.members.should contain(people(:quentin))
-    @artist.members.should contain(people(:aaron))
-    @artist.members.should_not contain(people(:admin))
-    @artist.members.should_not contain(people(:kelly))
+
+    @artist.members.should contain_member_with_person(people(:quentin))
+    @artist.members.should contain_member_with_person(people(:aaron))
+    @artist.members.should_not contain_member_with_person(people(:admin))
+    @artist.members.should_not contain_member_with_person(people(:kelly))
   end
 
   it "should have fans" do
@@ -40,6 +41,14 @@ describe Artist do
     @artist.fans.should_not contain(people(:aaron))
     @artist.fans.should contain(people(:admin))
     @artist.fans.should contain(people(:kelly))
+  end
+
+  it "should say quentin should be a member" do
+    @artist.is_member?(people(:quentin)).should be_true
+  end
+
+  it "should say kelly is not a member" do
+    @artist.is_member?(people(:kelly)).should_not be_true
   end
 
   private
@@ -91,3 +100,5 @@ describe Artist do
   end
 
 end
+
+

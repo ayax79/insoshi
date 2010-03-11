@@ -5,21 +5,19 @@ class Artist < ActiveRecord::Base
   MAX_DEFAULT_CONTACTS = 12
   FEED_SIZE = 10
 
-  has_and_belongs_to_many :members, :class_name => 'Person', :join_table => 'artists_members'
   has_and_belongs_to_many :fans, :class_name => 'Person', :join_table => 'artists_fans'
   has_many :artist_invites, :dependent => :destroy
   has_many :activities, :through => :feeds, :order => 'activities.created_at DESC',
            :limit => FEED_SIZE,
            :conditions => ["people.deactivated = ?", false],
            :include => :person
+  has_many :members, :class_name => 'ArtistMember'
 
   validates_presence_of :name
   validates_uniqueness_of :name
 
   before_update :set_old_description
   after_update :log_activity_description_changed
-
-  before_save :set_old_fans_members
 
   #photo helpers
 
@@ -52,18 +50,20 @@ class Artist < ActiveRecord::Base
                                    :limit => FEED_SIZE)
   end
 
+  def is_member?(person)
+    !ArtistMember.find(:first,
+                  :conditions => [" person_id = ? and artist_id = ?", person.id, self.id ]).nil?
+  end
+
+  def is_fan?(person)
+    fans.include? person
+  end
+
   protected
 
   def set_old_description
     @old_description = Artist.find(self).description
   end
-
-  def set_old_fans_members
-    artist = Artist.find(self)
-    @old_fans = artist.fans
-    @old_members = artist.members
-  end
-
 
   def log_activity_description_changed
     unless @old_description == description or description.blank?

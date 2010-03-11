@@ -7,30 +7,6 @@ describe ArtistHelper do
     @artist = artists(:foobars)
   end
 
-  it "should have say quentin is a member of foobars" do
-    is_member(people(:quentin), @artist).should be_true
-  end
-
-  it "should not have kelly as a member of foobars" do
-    is_member(people(:kelly), @artist).should be_false
-  end
-
-  it "should not say nil is a member" do
-    is_member(nil, @artist).should be_false
-  end
-
-  it "should have kelly as a fan of foobars" do
-    is_fan(people(:kelly), @artist).should be_true
-  end
-
-  it "should not have quentin as a fan of foobars" do
-    is_fan(people(:quentin), @artist).should be_false
-  end
-
-  it "should not say nil is a fan" do
-    is_fan(nil, @artist).should be_false
-  end
-
   it "should have no be a fan link" do
     fan_link(people(:quentin), @artist).should be_nil
   end

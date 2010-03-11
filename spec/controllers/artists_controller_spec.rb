@@ -31,7 +31,7 @@ describe ArtistsController do
       person = login_as(:quentin)
       artist_hash = { :name => "another band", :description => "yes this band sucks too" }
       post :create, :artist => artist_hash, :addresses => ' foo1@bar.com foo2.bar.com '
-      assigns(:artist).members.should contain(person)
+      assigns(:artist).members.should contain_member_with_person(person)
       assigns(:artist).description.should == "yes this band sucks too"
       assigns(:artist).name.should == "another band"
       assigns(:artist).artist_invites.should_not be_nil
@@ -54,7 +54,7 @@ describe ArtistsController do
     get :accept_member_invite, :id => invite, :accept => true
     flash[:artist_invite].should_not be_nil
     assigns(:person).should == person
-    assigns(:artist).members.should contain(person)
+    assigns(:artist).members.should contain_member_with_person(person)
     assigns(:accept).should be_true
     response.should redirect_to(artist_url(assigns(:artist)))
   end

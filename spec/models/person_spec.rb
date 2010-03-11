@@ -464,9 +464,19 @@ describe Person do
 
   describe "artist associations" do
     it "should be a member of a band" do
-      @person.membered_artists.should be_a_kind_of(Array)
-      @person.membered_artists.should_not be_empty
-      @person.membered_artists.should contain(artists(:foobars))
+      @person.members.should be_a_kind_of(Array)
+      @person.members.should_not be_empty
+      @person.members.should satisfy do |x|
+        artist = artists(:foobars)
+        found = false
+        x.each do |member|
+          if member.artist == artist
+            found = true
+            break
+          end
+        end
+        found
+      end
     end
   end
 

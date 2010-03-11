@@ -97,6 +97,10 @@ class Person < ActiveRecord::Base
   has_many :events
   has_many :event_attendees
   has_many :attendee_events, :through => :event_attendees, :source => :event
+  has_many :members, :class_name => 'ArtistMember'
+
+  has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
+  
 
   validates_presence_of     :email, :name
   validates_presence_of     :password,              :if => :password_required?
@@ -122,9 +126,6 @@ class Person < ActiveRecord::Base
   after_update :log_activity_description_changed
   before_destroy :destroy_activities, :destroy_feeds
 
-
-  has_and_belongs_to_many :membered_artists, :class_name => 'Artist', :join_table => 'artists_members'
-  has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
 
   class << self
 

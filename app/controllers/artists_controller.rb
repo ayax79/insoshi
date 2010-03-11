@@ -39,11 +39,11 @@ class ArtistsController < ApplicationController
 
   def create
     @artist = Artist.new(params[:artist])
-    @artist.members << current_person
     add_invites
 
     respond_to do |format|
       if @artist.save
+        @artist.members << ArtistMember.create!(:person => current_person, :artist => @artist) 
         format.html { redirect_to(@artist) }
       else
         format.html { render :action => 'new'}
@@ -73,7 +73,7 @@ class ArtistsController < ApplicationController
   def fan
     @artist = Artist.find(params[:id])
     #noinspection RubyDuckType
-    @artist.fans << current_person unless is_fan current_person, @artist
+    @artist.fans << current_person unless @artist.is_fan?(current_person)
     @artist.save
     respond_to do |format|
       format.html { redirect_to :action => 'show', :id => @artist }
@@ -89,7 +89,7 @@ class ArtistsController < ApplicationController
     if @invite.email == @person.email
       @invite.delete
       if @accept
-        @artist.members << @person
+        @artist.members << ArtistMember.create!(:person => @person, :artist => @artist)
         @artist.save!
         flash[:artist_invite] = "You have a successfully been added a member"
       else
@@ -120,7 +120,7 @@ class ArtistsController < ApplicationController
 
   def member_required
     @artist = Artist.find(params[:id])
-    is_member current_person, @artist
+    @artist.is_member? current_person
   end
 
 end

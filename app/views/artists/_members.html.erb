@@ -3,7 +3,7 @@
       <h2>Members (<span class="artist-member-count"><%= @artist.members.size %></span>)</h2>
       <ul>
         <% @artist.members.each do |member| %>
-            <li><%= link_to member.name, member %></li>
+            <li><%= link_to person_link(member.person) %></li>
         <% end %>
       </ul>
     </div>

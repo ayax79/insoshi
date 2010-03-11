@@ -109,6 +109,9 @@ module ActivitiesHelper
       when "Artist"
         artist = activity.artist
         %(#{artist_link(artist)}'s description changed)
+      when "ArtistMembershipChange"
+        artist = activity.artist
+        %(#{artist_link(artist)}'s membership has changed)
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -173,6 +176,9 @@ module ActivitiesHelper
       when "Artist"
         artist = activity.artist
         %(#{artist_link(artist)}'s description changed)
+      when "ArtistMembershipChange"
+        artist = activity.artist
+        %(#{artist_link(artist)}'s membership has changed)
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end

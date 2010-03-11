@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  artist: :foobars
+  person: :quentin
+  description: Bassist
+
+two:
+  artist: :foobars
+  person: :aaron
+  description: MyString
