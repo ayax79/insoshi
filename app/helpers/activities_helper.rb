@@ -109,9 +109,11 @@ module ActivitiesHelper
       when "Artist"
         artist = activity.artist
         %(#{artist_link(artist)}'s description changed)
-      when "ArtistMembershipChange"
-        artist = activity.artist
-        %(#{artist_link(artist)}'s membership has changed)
+      when "ArtistMember"
+        member = activity.item
+        artist = member.artist
+        person = member.person
+        %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -176,9 +178,11 @@ module ActivitiesHelper
       when "Artist"
         artist = activity.artist
         %(#{artist_link(artist)}'s description changed)
-      when "ArtistMembershipChange"
-        artist = activity.artist
-        %(#{artist_link(artist)}'s membership has changed)
+      when "ArtistMember"
+        member = activity.item
+        artist = member.artist
+        person = member.person
+        %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -282,6 +286,13 @@ module ActivitiesHelper
     link_to(text, event_path(event))
   end
 
+  def artist_link(text, artist=nil)
+    if artist.nil?
+      artist = text
+      text = artist.name
+    end
+    link_to(h(text), artist_path(artist))
+  end
 
   # Return a link to the wall.
   def wall(activity)
