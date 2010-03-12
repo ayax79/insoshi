@@ -1,11 +1,12 @@
 class PeopleController < ApplicationController
-  
+
   skip_before_filter :require_activation, :only => :verify_email
   before_filter :login_required, :only => [ :show, :edit, :update,
                                             :common_contacts ]
   before_filter :correct_user_required, :only => [ :edit, :update ]
+  before_filter :rpx_setup, :only => [:create]
   before_filter :setup
-  
+
   def index
     @people = Person.mostly_active(params[:page])
 
@@ -13,7 +14,7 @@ class PeopleController < ApplicationController
       format.html
     end
   end
-  
+
   def show
     @person = Person.find(params[:id])
     unless @person.active? or current_person.admin?
@@ -40,6 +41,7 @@ class PeopleController < ApplicationController
   def new
     @body = "register single-col"
     @person = Person.new
+    populate_rpx_fields @person
 
     respond_to do |format|
       format.html
@@ -54,6 +56,9 @@ class PeopleController < ApplicationController
       @person.identity_url = session[:verified_identity_url]
       @person.save
       if @person.errors.empty?
+        auth_info = session[:rpx_auth_info]
+        @rpx.map auth_info['identifier'], @person.id unless auth_info.nil?
+
         session[:verified_identity_url] = nil
         if global_prefs.email_verifications?
           @person.email_verifications.create
@@ -67,12 +72,13 @@ class PeopleController < ApplicationController
         end
       else
         @body = "register single-col"
-        format.html { if @person.identity_url.blank? 
-                        render :action => 'new'
-                      else
-                        render :partial => "shared/personal_details.html.erb", :object => @person, :layout => 'application'
-                      end
-                    }
+        format.html {
+          if @person.identity_url.blank?
+            render :action => 'new'
+          else
+            render :partial => "shared/personal_details.html.erb", :object => @person, :layout => 'application'
+          end
+        }
       end
     end
   rescue ActiveRecord::StatementInvalid
@@ -113,27 +119,27 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     respond_to do |format|
       case params[:type]
-      when 'info_edit'
-        if !preview? and @person.update_attributes(params[:person])
-          flash[:success] = 'Profile updated!'
-          format.html { redirect_to(@person) }
-        else
-          if preview?
-            @preview = @person.description = params[:person][:description]
+        when 'info_edit'
+          if !preview? and @person.update_attributes(params[:person])
+            flash[:success] = 'Profile updated!'
+            format.html { redirect_to(@person) }
+          else
+            if preview?
+              @preview = @person.description = params[:person][:description]
+            end
+            format.html { render :action => "edit" }
           end
-          format.html { render :action => "edit" }
-        end
-      when 'password_edit'
-        if @person.change_password?(params[:person])
-          flash[:success] = 'Password changed.'
-          format.html { redirect_to(@person) }
-        else
-          format.html { render :action => "edit" }
-        end
+        when 'password_edit'
+          if @person.change_password?(params[:person])
+            flash[:success] = 'Password changed.'
+            format.html { redirect_to(@person) }
+          else
+            format.html { render :action => "edit" }
+          end
       end
     end
   end
-  
+
   def common_contacts
     @person = Person.find(params[:id])
     @common_contacts = @person.common_contacts_with(current_person,
@@ -142,18 +148,27 @@ class PeopleController < ApplicationController
       format.html
     end
   end
-  
+
   private
 
-    def setup
-      @body = "person"
+  def setup
+    @body = "person"
+  end
+
+  def correct_user_required
+    redirect_to home_url unless Person.find(params[:id]) == current_person
+  end
+
+  def preview?
+    params["commit"] == "Preview"
+  end
+
+  def populate_rpx_fields(person)
+    data = session[:rpx_auth_info]
+    unless data.nil?
+      person.email = data['email']
+      person.name = data['displayName']
     end
-  
-    def correct_user_required
-      redirect_to home_url unless Person.find(params[:id]) == current_person
-    end
-    
-    def preview?
-      params["commit"] == "Preview"
-    end
+  end
+
 end

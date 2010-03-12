@@ -1,70 +1,75 @@
 <%- column_div :type => :primary do -%>
-  <h2>Sign in</h2>
+    <h2>Sign in</h2>
 
-  <% form_tag session_path do -%>
-    <div id="standard">
-        <div class="form_row">
-          <label for="email">Email address</label>
-          <%= text_field_tag 'email', params[:email],
-                             :maxlength => Person::MAX_EMAIL  %>
+    <% form_tag session_path do -%>
+        <div id="standard">
+          <div class="form_row">
+            <label for="email">Email address</label>
+            <%= text_field_tag 'email', params[:email],
+                               :maxlength => Person::MAX_EMAIL %>
+          </div>
+          <%= set_focus_to "email" %>
+
+          <div class="form_row">
+            <label for="password">Password</label>
+            <%= password_field_tag 'password', params[:password],
+                                   :maxlength => Person::MAX_PASSWORD %>
+          </div>
         </div>
-        <%= set_focus_to "email" %>
 
         <div class="form_row">
-          <label for="password">Password</label>
-          <%= password_field_tag 'password', params[:password],
-                                 :maxlength => Person::MAX_PASSWORD %>
+          <label for="remember_me" class="checkbox">Remember me:</label>
+          <%= check_box_tag 'remember_me', '1', true, :class => "checkbox" %>
         </div>
-    </div>
 
-    <div class="form_row">
-      <label for="remember_me" class="checkbox">Remember me:</label>
-      <%= check_box_tag 'remember_me', '1', true, :class => "checkbox" %>
-    </div>
+        <div class="form_row">
+          <%= submit_tag 'Sign in', :class => "button" %>
+        </div>
 
-    <div class="form_row">
-      <%= submit_tag 'Sign in', :class => "button" %>
-    </div>
+        <div style="text-align: center; font-size: 12px; padding: 10px;">
+          <%= link_to "or Sign up", signup_path %> <br/>
+          <%- if global_prefs.can_send_email? -%>
+              <%= link_to "I forgot my password!", new_password_reminder_path %> :: <%= rpx_link %>
+          <%- end -%>
 
-<div style="text-align: center; font-size: 12px; padding: 10px;">
-  <%= link_to "or Sign up", signup_path %> <br />
-  <%- if global_prefs.can_send_email? -%>
-    <%= link_to "I forgot my password!", new_password_reminder_path %> ::
-  <%- end -%>
-
-</div>
-  <% end -%>
+        </div>
+    <% end -%>
 <%- end -%>
+<script src="https://rpxnow.com/openid/v2/widget"
+        type="text/javascript"></script>
 <script type='text/javascript'>
-$(document).ready(function() {
+    RPXNOW.overlay = true;
+    RPXNOW.language_preference = 'en';
 
-  $('#standard_link').hide();
-  $('#noscript').show();
+    $(document).ready(function() {
+
+        $('#standard_link').hide();
+        $('#noscript').show();
 
 
-  function createCookie(name,value,days) {
-      if (days) {
-          var date = new Date();
-          date.setTime(date.getTime()+(days*24*60*60*1000));
-          var expires = "; expires="+date.toGMTString();
-      }
-      else var expires = "";
-      document.cookie = name+"="+value+expires+"; path=/";
-  }
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            }
+            else var expires = "";
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
 
-  function readCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0;i < ca.length;i++) {
-          var c = ca[i];
-          while (c.charAt(0)==' ') c = c.substring(1,c.length);
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-      }
-      return null;
-  }
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
 
-  function eraseCookie(name) {
-      createCookie(name,"",-1);
-  }
-})
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+    });
 </script>

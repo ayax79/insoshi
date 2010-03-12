@@ -8,6 +8,9 @@ describe "login page" do
   
   it "should have a password reminder link when app can send email" do
     @global_prefs.should be_can_send_email
+    mock_rpx = mock(Rpx)
+    mock_rpx.stub!(:signin_url).and_return('http://blah')
+    assigns[:rpx] = mock_rpx
     render "/sessions/new.html.erb"
     response.should have_tag("a[href=?]", new_password_reminder_path)
   end

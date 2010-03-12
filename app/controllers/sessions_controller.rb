@@ -2,6 +2,8 @@
 class SessionsController < ApplicationController
 
   skip_before_filter :require_activation, :only => [:new, :destroy]
+  skip_filter :verify_authenticity_token, :only => [:rpx_map_return, :rpx_return, :rpx_unmap] 
+  before_filter :rpx_setup
 
   def new
     @body = "login single-col"
@@ -87,4 +89,96 @@ class SessionsController < ApplicationController
       redirect_back_or_default(login_url)
     end
   end
+
+  def rpx_return
+    if params[:error]
+      flash[:error] = "OpenID Authentication Failed: #{params[:error]}"
+      redirect_to :login
+      return
+    end
+
+    if !params[:token]
+      flash[:notice] = "OpenID Authentication Cancelled"
+      redirect_to :login
+      return
+    end
+
+    data = @rpx.auth_info(params[:token], request.url)
+    primary_key = data["primaryKey"]
+
+    person = nil
+    begin
+      person = Person.find(primary_key) unless primary_key.nil?
+    rescue ActiveRecord::RecordNotFound
+      # just ignore
+    end
+
+    if person.nil?
+      flash[:error] = 'That login has not been tied to an account, would you like to register it?'
+      session[:rpx_auth_info] = data
+    else
+      self.current_person = person
+    end
+
+    if logged_in?
+      redirect_to :controller => 'home', :action => 'index'
+    elsif session[:rpx_auth_info]
+      redirect_to :signup
+    else
+      redirect_to :login # shouldn't really happen
+    end
+
+  end
+
+  def rpx_map_return
+    if params[:error]
+      flash[:error] = "OpenID Authentication Failed: #{params[:error]}"
+      redirect_to :controller => "home", :action => "index"
+      return
+    end
+
+    if !params[:token]
+      flash[:notice] = "OpenID Authentication Cancelled"
+      redirect_to :controller => "home", :action => "index"
+      return
+    end
+
+    data = @rpx.auth_info(params[:token], request.url)
+
+    identifier = data["identifier"]
+    primary_key = data["primaryKey"]
+
+    if primary_key.nil?
+      @rpx.map identifier, self.current_user.id
+      flash[:notice] = "#{identifier} added to your account"
+      redirect_to :controller => "home", :action => "index"
+    else
+      if self.current_user.id == primary_key.to_i
+        flash[:notice] = "That OpenID was already associated with this account"
+        redirect_to :controller => "home", :action => "index"
+      else
+        # The OpenID was already associated with a different user account.
+        session[:identifier] = identifier
+        @other_user = User.find_by_id primary_key
+        flash[:notice] = "That OpenID was already associated with #{@other_user.login}, <a onclick=\"javascript:RPXUtil.unmap(\\'#{identifier}\\')\" href=\"#\">Unmap</a>?"
+        redirect_to :controller => "home", :action => "index"
+      end
+    end
+
+  end
+
+  def rpx_unmap
+    identifier = params[:open_id]
+
+    @rpx.unmap identifier, self.current_user.id
+
+    respond_to do |format|
+      format.json { render :json => "OpenID #{identifier} removed" }
+      format.html do
+        flash[:notice] = "OpenID #{identifier} removed"
+        redirect_to :controller => :home, :action => :index
+      end
+    end
+  end
+
 end
