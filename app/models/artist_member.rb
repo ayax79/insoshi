@@ -1,5 +1,5 @@
 class ArtistMember < ActiveRecord::Base
-  extend ActivityLogger
+  include ActivityLogger
   extend PreferencesHelper
 
   belongs_to :artist
@@ -10,7 +10,7 @@ class ArtistMember < ActiveRecord::Base
   protected
 
   def log_member_added
-# todo    add_activities :item => self, :person => self
+    add_activities(:item => self, :person => person, :artist => artist)
   end
 
 end

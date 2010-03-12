@@ -9,7 +9,7 @@ class HomeController < ApplicationController
       @feed = current_person.feed
       @some_contacts = current_person.some_contacts
       @requested_contacts = current_person.requested_contacts
-      @membered_artists = current_person.membered_artists
+      @membered_artists = current_person.members
       @fanned_artists = current_person.fanned_artists
     else
       @feed = Activity.global_feed

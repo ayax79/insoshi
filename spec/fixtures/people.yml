@@ -52,6 +52,18 @@ bob:
   wall_comment_notifications: true
   blog_comment_notifications: true
 
+isaac:
+  email: isaac@example.com
+  name: Isaac Brock
+  description: Blah blah blah
+  crypted_password: <%= password %>
+  created_at: <%= 1.day.ago.to_s :db %>
+  deactivated: false
+  connection_notifications: true
+  message_notifications: true
+  wall_comment_notifications: true
+  blog_comment_notifications: true
+
 admin:
   email: admin@example.com
   name: admin

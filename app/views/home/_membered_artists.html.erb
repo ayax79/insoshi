@@ -1,15 +1,15 @@
 <% unless @membered_artists.empty? %>
     <h2>Your Artists</h2>
     <ul class="list requests small">
-      <%- @membered_artists.each do |artist| -%>
+      <%- @membered_artists.each do |member| -%>
           <li>
             <!--<div class="artist-image">-->
               <!-- image here -->
             <!--</div>-->
-            <p><%= artist_link artist %></p>
+            <p><%= artist_link member.artist %></p>
 
             <p class="meta published">
-              <%= time_ago_in_words(artist.created_at) %>
+              <%= time_ago_in_words(member.created_at) %>
               ago
             </p>
           </li>

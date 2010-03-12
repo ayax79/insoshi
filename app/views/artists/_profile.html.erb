@@ -12,7 +12,7 @@
                             link_path(:action => 'fan', :id => @artist),
                             :method => :post %></li>
         <%- end -%>
-        <%- if is_fan?(current_person, @artist) -%>
+        <%- if @artist.is_fan?(current_person) -%>
             <li>You're a fan!
               <%= link_to image_tag('icons/user_delete.png'),
                           "alert('todo')",

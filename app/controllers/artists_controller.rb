@@ -39,11 +39,11 @@ class ArtistsController < ApplicationController
 
   def create
     @artist = Artist.new(params[:artist])
+    @artist.members << ArtistMember.create!(:person => current_person, :artist => @artist)
     add_invites
 
     respond_to do |format|
       if @artist.save
-        @artist.members << ArtistMember.create!(:person => current_person, :artist => @artist) 
         format.html { redirect_to(@artist) }
       else
         format.html { render :action => 'new'}
@@ -85,11 +85,11 @@ class ArtistsController < ApplicationController
     @accept = params[:accept]
     @artist = @invite.artist
     @person = current_person
+    @artist.members << ArtistMember.create!(:person => @person, :artist => @artist)
 
     if @invite.email == @person.email
       @invite.delete
       if @accept
-        @artist.members << ArtistMember.create!(:person => @person, :artist => @artist)
         @artist.save!
         flash[:artist_invite] = "You have a successfully been added a member"
       else

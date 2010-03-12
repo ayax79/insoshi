@@ -227,6 +227,8 @@ module ActivitiesHelper
         "check.gif"
       when "Artist"
         "vcard.png"
+      when "ArtistMember"
+        "vcard.png"
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
