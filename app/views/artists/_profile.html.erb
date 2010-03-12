@@ -9,7 +9,7 @@
     <%- if logged_in? -%>
         <%- unless @artist.is_member?(current_person) or @artist.is_fan?(current_person) -%>
             <li><%= link_to "Become a Fan",
-                            link_path(:action => 'fan', :id => @artist),
+                            :action => 'fan', :id => @artist,
                             :method => :post %></li>
         <%- end -%>
         <%- if @artist.is_fan?(current_person) -%>
