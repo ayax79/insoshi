@@ -57,7 +57,11 @@ class PeopleController < ApplicationController
       @person.save
       if @person.errors.empty?
         auth_info = session[:rpx_auth_info]
-        @rpx.map auth_info['identifier'], @person.id unless auth_info.nil?
+        unless auth_info.nil?
+          @rpx.map auth_info['identifier'], @person.id
+          handle_external_cred @person, auth_info
+        end
+
 
         session[:verified_identity_url] = nil
         if global_prefs.email_verifications?
@@ -168,6 +172,18 @@ class PeopleController < ApplicationController
     unless data.nil?
       person.email = data['email']
       person.name = data['displayName']
+    end
+  end
+
+  def handle_external_cred(person, data)
+    unless data.nil?
+      provider = ExternalCred.determine_provider_from_rpx data['providerName']
+      username = data['preferredUsername']
+      identifier = data['identifier']
+      ExternalCred.create!(:person => person,
+                           :provider => provider,
+                           :username => username,
+                           :identifier => identifier)
     end
   end
 

@@ -19,3 +19,8 @@ RASTER_PER_PAGE = 3 * N_COLUMNS
 
 #RICH TEXT EDITOR SIZE (pixels)
 RICH_TEXT_HEIGHT = '350px'
+
+# rpx configuration
+RPX_BASE_URL = 'https://rpxnow.com'
+RPX_API_KEY = '07d8dfed559df3751e05fdb4ab2bdaf94d4b48c4'
+RPX_REALM = 'maynerd'

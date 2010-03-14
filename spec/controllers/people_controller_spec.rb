@@ -96,6 +96,20 @@ describe PeopleController do
         response.should be_success
       end.should_not change(Person, :count)
     end
+
+    it "should create a external cred record " do
+      rpx_mock = mock(Rpx::RpxHelper)
+      rpx_mock.stub!(:map)
+      Rpx::RpxHelper.stub!(:new).and_return(rpx_mock)
+
+      lambda do
+        session[:rpx_auth_info] = { 'identifier' => 'sdfsdf',
+                                    'displayName' => 'sdlkfjasldfkja',
+                                    'preferredUsername' => 'sldafaj',
+                                    'provider' => 'Twitter'}
+        create_person
+      end.should change(ExternalCred, :count).by(1)
+    end
     
     describe "email verifications" do
       

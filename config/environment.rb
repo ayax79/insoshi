@@ -86,7 +86,3 @@ require 'vendor/plugins/jquery_ui_rails_helpers/helpers/tabs_renderer'
 # The directory /tmp/ruby.[USER] is used instead
 ENV['INLINEDIR']="/tmp/ruby.#{ENV['USER']}" unless ENV['OS'] =~ /Windows/
 
-# rpx configuration
-RPX_BASE_URL = 'https://rpxnow.com'
-RPX_API_KEY = '07d8dfed559df3751e05fdb4ab2bdaf94d4b48c4'
-RPX_REALM = 'maynerd'
