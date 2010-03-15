@@ -1,3 +1,7 @@
+require 'twitter'
+require 'external_cred'
+require 'external_item'
+
 class RemoteActivityDigesterTask < Rooster::Task
 
   @tags = ['RemoteActivityDigester'] # CUSTOMIZE:  add additional tags here
@@ -7,16 +11,7 @@ class RemoteActivityDigesterTask < Rooster::Task
       begin
         log "#{self.name} starting at #{Time.now.to_s(:db)}"
         ActiveRecord::Base.connection.reconnect!
-
-        rpx = build_rpx
-        rpx.mappings.each do |mapping|
-          
-
-
-
-        end
-
-
+        execute_task
       ensure
         log "#{self.name} completed at #{Time.now.to_s(:db)}"
         ActiveRecord::Base.connection_pool.release_connection
@@ -24,9 +19,36 @@ class RemoteActivityDigesterTask < Rooster::Task
     end
   end
 
-  def build_rpx
-    Rpx::RpxHelper.new(RPX_API_KEY, RPX_BASE_URL, RPX_REALM)
+  def execute_task
+    ExternalCred.find_all_twitter do |external_cred|
+      unless external_cred.username.is_nil?
+        person = external_cred.person
+        item = ExternalItem.find_last_twitter_item person
+
+        # if they have already imported activities in start with the last
+        # id, otherwise start with today
+        options = {}
+        if item.nil?
+          options[:since] = item.ext_id
+        else
+          options[:since_date] = Date.today
+        end
+
+        twitter_activity(external_cred.username, options) do |tweet|
+          ExternalItem.create!(:provider => 'twitter',
+                               :post_date => tweet.created_at,
+                               :ext_id => tweet.id,
+                               :description => tweet.text)
+        end
+      end
+    end
   end
 
+  def twitter_activity(username, options={})
+    search = Twitter::Search.new.from username
+    search.since options[:since] unless options[:since].nil?
+    search.since_date options[:since_date] unless options[:since_date].nil?
+    search.each { |x| yield x }
+  end
 
 end
