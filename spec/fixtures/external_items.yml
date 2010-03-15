@@ -1,0 +1,23 @@
+one:
+  person: :bob
+  provider: twitter
+  description: Yes I cut the cheese
+  post_date: <%= 5.days.ago.to_s :db %>
+  ext_id: 23353423
+
+two:
+  person: :bob
+  provider: facebook
+  description: The slow fat fox
+  post_date: <%= 5.days.ago.to_s :db %>
+  ext_id: 23353425
+
+three:
+  person: :quentin
+  provider: twitter
+  description: splat
+  post_date: <%= 5.days.ago.to_s :db %>
+  ext_id: 23353420
+
+  
+  

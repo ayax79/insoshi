@@ -99,6 +99,7 @@ class Person < ActiveRecord::Base
   has_many :attendee_events, :through => :event_attendees, :source => :event
   has_many :members, :class_name => 'ArtistMember'
   has_many :external_creds
+  has_many :external_items
 
   has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
   
