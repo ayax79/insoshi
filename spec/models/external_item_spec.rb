@@ -8,19 +8,21 @@ describe ExternalItem do
 
 
   it "should create a valid entry for twitter" do
-    values = { :provider => 'twitter',
-               :person => @person,
-               :post_date => 5.day.ago,
-               :description => "I took a poop",
-               :ext_id => 2353223}
-    item = ExternalItem.create! values
-    item.should_not be_nil
-    item.id.should_not be_nil
-    item = ExternalItem.find item
-    item.provider.should == values[:provider]
-    item.person.should == values[:person]
-    item.post_date.should == values[:post_date]
-    item.description.should == values[:description]
+    lambda do
+      values = { :provider => 'twitter',
+                 :person => @person,
+                 :post_date => 5.day.ago,
+                 :description => "I took a poop",
+                 :ext_id => 2353223 }
+      item = ExternalItem.create! values
+      item.should_not be_nil
+      item.id.should_not be_nil
+      item = ExternalItem.find item
+      item.provider.should == values[:provider]
+      item.person.should == values[:person]
+      item.post_date.should == values[:post_date]
+      item.description.should == values[:description]
+    end.should change(ExternalItem, :count).by(1)
   end
 
   it "should require a person " do
