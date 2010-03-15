@@ -2,9 +2,9 @@ require 'twitter'
 require 'external_cred'
 require 'external_item'
 
-class RemoteActivityDigesterTask < Rooster::Task
+class TwitterAtivityDigester < Rooster::Task
 
-  @tags = ['RemoteActivityDigester'] # CUSTOMIZE:  add additional tags here
+  @tags = ['TwitterActivityDigester'] # CUSTOMIZE:  add additional tags here
 
   define_schedule do |s|
     s.every "1d", :first_at => Chronic.parse("next 2:00am"), :tags => @tags do  # CUSTOMIZE:  reference http://github.com/jmettraux/rufus-scheduler/tree/master
