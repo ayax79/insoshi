@@ -19,4 +19,10 @@ describe ExternalCred do
     cred.identifier.should == @valid_attributes[:identifier]
     cred.person.should == @person
   end
+
+  it "should return value for find all twitter" do
+    val = external_creds(:quentin_twitter)
+    ExternalCred.find_all_twitter.should contain(val)
+  end
+
 end

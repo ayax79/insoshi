@@ -2,12 +2,12 @@ require 'twitter'
 require 'external_cred'
 require 'external_item'
 
-class TwitterAtivityDigester < Rooster::Task
+class TwitterActivityDigester < Rooster::Task
 
   @tags = ['TwitterActivityDigester'] # CUSTOMIZE:  add additional tags here
 
   define_schedule do |s|
-    s.every "1d", :first_at => Chronic.parse("next 2:00am"), :tags => @tags do  # CUSTOMIZE:  reference http://github.com/jmettraux/rufus-scheduler/tree/master
+    s.every "15m", :first_at => Chronic.parse("next 2:00am"), :tags => @tags do  # CUSTOMIZE:  reference http://github.com/jmettraux/rufus-scheduler/tree/master
       begin
         log "#{self.name} starting at #{Time.now.to_s(:db)}"
         ActiveRecord::Base.connection.reconnect!
@@ -44,11 +44,13 @@ class TwitterAtivityDigester < Rooster::Task
     end
   end
 
-  def twitter_activity(username, options={})
+  def twitter_activity(username, options={}, &block)
     search = Twitter::Search.new.from username
     search.since options[:since] unless options[:since].nil?
     search.since_date options[:since_date] unless options[:since_date].nil?
-    search.each { |x| yield x }
+    search.each do |x|
+      block.call x
+    end
   end
 
 end
