@@ -1,12 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/rooster/tasks/twitter_activity_digester'
+require File.dirname(__FILE__) + '/../../lib/cron/twitter_activity_digester'
+require 'hashie/mash'
 
 describe TwitterActivityDigester do
 
   USER_NAME='boop'
 
   before (:each) do
-    @activity = mock
+    @activity = mock(Hashie::Mash)
     @activity.stub!(:id).and_return(23234234)
     @activity.stub!(:created_at).and_return(5.days.ago)
     @activity.stub!(:text).and_return('blah blah blah blah')
@@ -18,7 +19,7 @@ describe TwitterActivityDigester do
     @twitter_search.stub!(:each).and_yield(@activity)
     Twitter::Search.stub!(:new).and_return(@twitter_search)
     @person = people(:quentin)
-    @digester = TwitterActivityDigester.new(nil)
+    @digester = TwitterActivityDigester.new
   end
 
   describe 'twitter_activity' do
@@ -52,11 +53,8 @@ describe TwitterActivityDigester do
 
   it "should enter external activity with mocked twitter activity by using create date" do
 
-    ExternalCred.find_all_twitter.size.should == 1
-
-
     lambda do
-      @digester.execute_task
+      @digester.run
     end.should change(ExternalItem, :count).by(1)
 
 
