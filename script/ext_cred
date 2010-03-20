@@ -1,0 +1,44 @@
+#!script/runner
+require 'person'
+require 'external_cred'
+
+def determine_options(args)
+  options = Hash.new
+  args.each do |each|
+    tokens = each.split(':')
+    raise NameError, 'tokens incorrect', tokens unless tokens.size == 2
+    puts "token 0 -> #{tokens[0]} : token 1 -> #{tokens[1]}"
+    case tokens[0]
+      when 'email'
+        options[:person] = Person.find_by_email! tokens[1]
+      when 'username'
+        options[:username] = tokens[1]
+      when 'provider'
+        options[:provider] = tokens[1]
+      when 'identifier'
+        options[:identifier] = tokens[1]
+      else
+        raise NameError, 'tokens should have email,username,provider or identifier not ' + tokens[1]
+    end
+  end
+  options
+end
+
+def add
+  cred = ExternalCred.create!(determine_options(ARGV[1..-1]))
+  puts "created cred: ", cred.to_yaml
+end
+
+
+if $0 =~ /runner/
+
+  raise NameError, 'no args supplied' if ARGV.empty?
+
+  case ARGV[0]
+    when 'add'
+      add
+    else
+      raise NameError, 'unknown command ' + ARGV[0]
+  end
+
+end
