@@ -23,7 +23,7 @@ class TwitterActivityDigester < Logger::Application
         # if they have already imported activities in start with the last
         # id, otherwise start with today
         options = {}
-        if item.nil?
+        if !item.nil?
           options[:since] = item.ext_id
         else
           options[:since_date] = Date.today
