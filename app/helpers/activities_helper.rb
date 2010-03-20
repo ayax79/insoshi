@@ -36,6 +36,7 @@ module ActivitiesHelper
               %(#{person_link_with_image(activity.item.commenter)}
             commented on #{wall(activity)})
             end
+
         end
       when "Event"
         # TODO: make recent/long versions for this
@@ -114,6 +115,8 @@ module ActivitiesHelper
         artist = member.artist
         person = member.person
         %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
+      when "ExternalItem"
+        activity.item.description
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -183,6 +186,8 @@ module ActivitiesHelper
         artist = member.artist
         person = member.person
         %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
+      when "ExternalItem"
+        activity.item.description
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -228,6 +233,8 @@ module ActivitiesHelper
       when "Artist"
         "vcard.png"
       when "ArtistMember"
+        "vcard.png"
+      when "ExternalItem"
         "vcard.png"
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
