@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'twitter'
 require 'external_cred'
 require 'external_item'
@@ -26,11 +27,11 @@ class TwitterActivityDigester < Logger::Application
         if !item.nil?
           options[:since] = item.ext_id
         else
-          options[:since_date] = Date.today
+          options[:since_date] = Date.yesterday
         end
 
         twitter_activity(external_cred.username, options) do |tweet|
-          log(DEBUG, 'Adding tweet - #{tweet}')
+          log(DEBUG, "Adding tweet - #{tweet.to_yaml}")
           ExternalItem.create!(:provider => 'twitter',
                                :post_date => tweet.created_at,
                                :ext_id => tweet.id,
@@ -38,16 +39,17 @@ class TwitterActivityDigester < Logger::Application
                                :person => external_cred.person)
         end
       end
-    end
+    end                                         
   end
 
   def twitter_activity(username, options={})
-    log(INFO, 'fetching twitter activity')
+    log(INFO, 'fetching twitter activity: options' +options.to_yaml)
     search = Twitter::Search.new.from username
     search.since options[:since] unless options[:since].nil?
     search.since_date options[:since_date] unless options[:since_date].nil?
+    puts search.to_yaml
     search.each do |x|
-      log(INFO, "in search with #{x}")
+      log(INFO, "in search with #{x.to_yaml}")
       yield x
     end
   end
