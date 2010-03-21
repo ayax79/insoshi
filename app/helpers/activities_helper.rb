@@ -328,6 +328,13 @@ module ActivitiesHelper
     end
   end
 
+  def activity_date(activity)
+    if not activity.item.nil?
+      return activity.item.post_date if activity.item.respond_to? :post_date
+    end
+    activity.created_at
+  end
+
   private
 
   # Return the type of activity.
