@@ -52,7 +52,7 @@
 </div>
 <% if session[:rpx_auth_info].nil? %>
 <div id="reg-with-external">
-  <iframe src="http://maynerd.rpxnow.com/openid/embed?token_url=http%3A%2F%2Flocalhost%3A3000%2Fsessions%2Frpx_return"
+  <iframe src="<%= rpx_embed_url %>"
           scrolling="no" frameBorder="no" allowtransparency="true" style="width:400px;height:240px"></iframe>
 </div>
 <% end %>
