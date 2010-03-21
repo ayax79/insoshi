@@ -116,7 +116,8 @@ module ActivitiesHelper
         person = member.person
         %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
       when "ExternalItem"
-        activity.item.description
+        item = activity.item
+        %(#{person_link(item.person)} posted #{item.description})
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -187,7 +188,8 @@ module ActivitiesHelper
         person = member.person
         %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
       when "ExternalItem"
-        activity.item.description
+        item = activity.item
+        %(#{person_link(item.person)} posted #{item.description}) 
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
@@ -235,7 +237,7 @@ module ActivitiesHelper
       when "ArtistMember"
         "vcard.png"
       when "ExternalItem"
-        "vcard.png"
+        "twitter.png"
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
