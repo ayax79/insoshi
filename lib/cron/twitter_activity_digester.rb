@@ -25,7 +25,7 @@ class TwitterActivityDigester < Logger::Application
         # id, otherwise start with today
         options = {}
         if !item.nil?
-          options[:since] = item.ext_id
+          options[:since] = item.ext_id + 1
         else
           options[:since_date] = Date.yesterday
         end
@@ -39,7 +39,7 @@ class TwitterActivityDigester < Logger::Application
                                :person => external_cred.person)
         end
       end
-    end                                         
+    end
   end
 
   def twitter_activity(username, options={})
@@ -48,9 +48,16 @@ class TwitterActivityDigester < Logger::Application
     search.since options[:since] unless options[:since].nil?
     search.since_date options[:since_date] unless options[:since_date].nil?
     puts search.to_yaml
-    search.each do |x|
-      log(INFO, "in search with #{x.to_yaml}")
-      yield x
+
+    fetched = search.fetch
+    unless fetched.nil?
+      results = fetched['results']
+      unless results.nil?
+        results.each do |x|
+          log(INFO, "in search with #{x.to_yaml}")
+          yield x
+        end
+      end
     end
   end
 
