@@ -16,7 +16,7 @@ describe TwitterActivityDigester do
     @twitter_search = mock(Twitter::Search)
     @twitter_search.stub!(:from).and_return(@twitter_search)
     @twitter_search.stub!(:since_date).and_return(@twitter_search)
-    @twitter_search.stub!(:each).and_yield(@activity)
+    @twitter_search.stub!(:fetch).and_return('results' => [@activity])
     Twitter::Search.stub!(:new).and_return(@twitter_search)
     @person = people(:quentin)
     @digester = TwitterActivityDigester.new
@@ -43,6 +43,7 @@ describe TwitterActivityDigester do
       count = 0
 
       @digester.twitter_activity(USER_NAME, :since => @activity.ext_id) do |x|
+        puts "called"
         x.should == @activity
         count = count + 1
       end
@@ -53,6 +54,7 @@ describe TwitterActivityDigester do
 
   it "should enter external activity with mocked twitter activity by using create date" do
 
+    @twitter_search.should_receive(:since).and_return(@twitter_search)
     lambda do
       @digester.run
     end.should change(ExternalItem, :count).by(1)

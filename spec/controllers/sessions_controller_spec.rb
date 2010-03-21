@@ -107,6 +107,10 @@ describe SessionsController do
     end
 
     it "should handle rpx return with an existing user's info" do
+      ext_cred = mock(ExternalCred)
+      ext_cred.stub!(:person).and_return(@person)
+      ExternalCred.stub!(:find_by_identifier).with(@auth_info['identifier']).and_return(ext_cred)
+
       post :rpx_return, :token => @token
       response.should redirect_to :controller => 'home', :action => 'index'
       assigns[:current_person].should == @person

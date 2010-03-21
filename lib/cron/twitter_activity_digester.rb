@@ -31,7 +31,7 @@ class TwitterActivityDigester < Logger::Application
         end
 
         twitter_activity(external_cred.username, options) do |tweet|
-          log(DEBUG, "Adding tweet - #{tweet.to_yaml}")
+          log(DEBUG, "Adding tweet - #{tweet.id}")
           ExternalItem.create!(:provider => 'twitter',
                                :post_date => tweet.created_at,
                                :ext_id => tweet.id,
@@ -43,18 +43,15 @@ class TwitterActivityDigester < Logger::Application
   end
 
   def twitter_activity(username, options={})
-    log(INFO, 'fetching twitter activity: options' +options.to_yaml)
     search = Twitter::Search.new.from username
     search.since options[:since] unless options[:since].nil?
     search.since_date options[:since_date] unless options[:since_date].nil?
-    puts search.to_yaml
 
     fetched = search.fetch
     unless fetched.nil?
       results = fetched['results']
       unless results.nil?
         results.each do |x|
-          log(INFO, "in search with #{x.to_yaml}")
           yield x
         end
       end
