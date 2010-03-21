@@ -58,10 +58,8 @@ class PeopleController < ApplicationController
       if @person.errors.empty?
         auth_info = session[:rpx_auth_info]
         unless auth_info.nil?
-          @rpx.map auth_info['identifier'], @person.id
           handle_external_cred @person, auth_info
         end
-
 
         session[:verified_identity_url] = nil
         if global_prefs.email_verifications?
