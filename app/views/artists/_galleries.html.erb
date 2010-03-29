@@ -1,0 +1,9 @@
+<h2><%= @artist.name %>'s Galleries </h2>
+<% if @artist.member? current_person %>
+  <%= link_to "Add Gallery", new_gallery_path(:artist_id => @artist.id) %>
+<% end %>
+
+<ul id="gallery_list" class="grid">
+  <%= render :partial => "shared/gallery", :collection => galleries %>
+</ul>  
+<%= will_paginate(galleries) %>

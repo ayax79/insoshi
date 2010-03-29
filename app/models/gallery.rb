@@ -15,31 +15,32 @@
 
 class Gallery < ActiveRecord::Base
   include ActivityLogger
-  
+
   attr_accessible :title, :description
-  
+
   belongs_to :person
+  belongs_to :artist
   has_many :photos, :dependent => :destroy, :order => :position
   has_many :activities, :foreign_key => "item_id", :dependent => :destroy,
-                        :conditions => "item_type = 'Gallery'"
-  
+           :conditions => "item_type = 'Gallery'"
+
 
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_length_of :description, :maximum => 1000, :allow_nil => true
-  validates_presence_of :person_id
+  validate :person_or_artist_required
 
   before_create :handle_nil_description
   after_create :log_activity
-  
+
   def self.per_page
     5
   end
-  
+
 
   def primary_photo
     photos.find_all_by_primary(true).first
   end
-  
+
   def primary_photo=(photo)
     if photo.nil?
       self.primary_photo_id = nil
@@ -47,38 +48,50 @@ class Gallery < ActiveRecord::Base
       self.primary_photo_id = photo.id
     end
   end
-  
+
   def primary_photo_url
     primary_photo.nil? ? "default.png" : primary_photo.public_filename
   end
 
   def thumbnail_url
     primary_photo.nil? ? "default_thumbnail.png" :
-                          primary_photo.public_filename(:thumbnail)
+            primary_photo.public_filename(:thumbnail)
   end
 
   def icon_url
     primary_photo.nil? ? "default_icon.png" :
-                         primary_photo.public_filename(:icon)
+            primary_photo.public_filename(:icon)
   end
 
   def bounded_icon_url
     primary_photo.nil? ? "default_icon.png" :
-                         primary_photo.public_filename(:bounded_icon)
+            primary_photo.public_filename(:bounded_icon)
   end
-    
+
   def short_description
     description[0..124]
   end
 
   protected
 
-    def handle_nil_description
-      self.description = "" if description.nil?
-    end
+  def handle_nil_description
+    self.description = "" if description.nil?
+  end
 
-    def log_activity
+  def log_activity
+    unless artist.nil?
+      activity = Activity.create!(:item => self, :artist => artist)
+      add_activities(:activity => activity, :artist => artist)
+    else
       activity = Activity.create!(:item => self, :person => person)
       add_activities(:activity => activity, :person => person)
     end
+  end
+
+  def person_or_artist_required
+    if person_id.nil? and artist_id.nil?
+      errors.add_to_base("Gallery must be tied to an artist or a person")
+    end
+  end
+
 end

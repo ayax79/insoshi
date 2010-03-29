@@ -1,6 +1,29 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  # Return a owner (a person or artist) image link.
+  # The default is to display the person's icon linked to the profile.
+  def image_link(owner, options = {})
+    link = options[:link] || owner
+    image = options[:image] || :icon
+    image_options = { :title => h(owner.name), :alt => h(owner.name) }
+    unless options[:image_options].nil?
+      image_options.merge!(options[:image_options])
+    end
+    link_options =  { :title => h(owner.name) }
+    unless options[:link_options].nil?
+      link_options.merge!(options[:link_options])
+    end
+    content = image_tag(owner.send(image), image_options)
+    # This is a hack needed for the way the designer handled rastered images
+    # (with a 'vcard' class).
+    if options[:vcard]
+      content = %(#{content}#{content_tag(:span, h(owner.name),
+                                          :class => "fn" )})
+    end
+    link_to(content, link, link_options)
+  end
+
   ## Application-wide values
   def app_name
     name = global_prefs.app_name
@@ -167,7 +190,7 @@ module ApplicationHelper
   def accept_artist_link(invite)
     link_to 'Yes', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => true
   end
-  
+
   def deny_artist_link(invite)
     link_to 'No', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => false
   end
@@ -206,6 +229,8 @@ module ApplicationHelper
   def no_paragraph_tag?(text)
     text !~ /^\<p/
   end
+
+
 
 
 end

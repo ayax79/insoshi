@@ -1,20 +1,26 @@
 class PhotosController < ApplicationController
 
+  include GallerySharedFilters
+
   before_filter :login_required
+
   before_filter :correct_user_required,
-                :only => [ :edit, :update, :destroy, :set_primary, 
+                :only => [ :edit, :update, :destroy, :set_primary,
                            :set_avatar ]
-  before_filter :correct_gallery_requried, :only => [:new, :create]
-  
+  before_filter :correct_gallery_required, :only => [:new, :create]
+  before_filter :artist_check,
+                :only => [ :edit, :update, :destroy, :set_primary,
+                           :set_avatar ]
+
   def index
     redirect_to person_galleries_path(current_person)
   end
-  
+
   def show
     @photo = Photo.find(params[:id])
   end
 
-  
+
   def new
     @photo = Photo.new
     @gallery = Gallery.find(params[:gallery_id])
@@ -52,7 +58,7 @@ class PhotosController < ApplicationController
 
   def update
     @photo = Photo.find(params[:id])
-    
+
     respond_to do |format|
       if @photo.update_attributes(params[:photo])
         flash[:success] = "Photo successfully updated"
@@ -72,7 +78,7 @@ class PhotosController < ApplicationController
       format.html { redirect_to gallery_path(@gallery) }
     end
   end
-  
+
   def set_primary
     @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.primary?
@@ -85,7 +91,7 @@ class PhotosController < ApplicationController
         @old_primary.each { |p| p.update_attributes!(:primary => false) }
         format.html { redirect_to(person_galleries_path(current_person)) }
         flash[:success] = "Gallery thumbnail set"
-      else    
+      else
         format.html do
           flash[:error] = "Invalid image!"
           redirect_to home_url
@@ -93,7 +99,7 @@ class PhotosController < ApplicationController
       end
     end
   end
-  
+
   def set_avatar
     @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.avatar?
@@ -101,13 +107,13 @@ class PhotosController < ApplicationController
     end
     # This should only have one entry, but be paranoid.
     @old_primary = current_person.photos.select(&:avatar?)
-  
+
     respond_to do |format|
       if @photo.update_attributes!(:avatar => true)
         @old_primary.each { |p| p.update_attributes!(:avatar => false) }
         flash[:success] = "Profile photo set"
         format.html { redirect_to current_person }
-      else    
+      else
         format.html do
           flash[:error] = "Invalid image!"
           redirect_to home_url
@@ -115,29 +121,29 @@ class PhotosController < ApplicationController
       end
     end
   end
-  
+
   private
-  
-    def correct_user_required
-      @photo = Photo.find(params[:id])
-      if @photo.nil?
-        redirect_to home_url
-      elsif !current_person?(@photo.person)
-        redirect_to home_url
+
+  def correct_user_required
+    @photo = Photo.find(params[:id])
+    if @photo.nil?
+      redirect_to home_url
+    elsif !current_person?(@photo.person)
+      redirect_to home_url
+    end
+  end
+
+  def correct_gallery_required
+    if params[:gallery_id].nil?
+      flash[:error] = "You cannot add photo without specifying gallery"
+      redirect_to home_path
+    else
+      @gallery = Gallery.find(params[:gallery_id])
+      if @artist.nil? and @gallery.person != current_person
+        flash[:error] = "You cannot add photos to this gallery"
+        redirect_to gallery_path(@gallery)
       end
     end
-    
-    def correct_gallery_requried
-      if params[:gallery_id].nil?
-        flash[:error] = "You cannot add photo without specifying gallery"
-        redirect_to home_path
-      else
-        @gallery = Gallery.find(params[:gallery_id])
-        if @gallery.person != current_person
-          flash[:error] = "You cannot add photos to this gallery"
-          redirect_to gallery_path(@gallery)
-        end
-      end
-    end
+  end
 end
 

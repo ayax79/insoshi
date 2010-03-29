@@ -9,16 +9,15 @@
     <% end %>
   
     <p>
-      <% if current_person?(@gallery.person)%>
-        <%= link_to "Add photo", new_gallery_photo_path(@gallery) %> |
-        <%= link_to "Edit gallery", edit_gallery_path %> |
+      <% if gallery_editable? @gallery %>
+        <%= link_to "Add photo", new_photo_path_handle_artist(@gallery) %> |
+        <%= link_to "Edit gallery", edit_gallery_path_handle_artist(@gallery) %> |
       <% end %>
-      <%= link_to "All galleries", person_path(@gallery.person,
-                                   :anchor => 'tGalleries') %>
+      <%= link_to "All galleries", all_galleries_path(@gallery) %>
     </p>
   
     <%- if @photos.empty? -%>
-    <h3>No photos (yet)
+    <h3>No photos (yet) </h3>
     <%- else -%>
       <ul>
         <%= render :partial=>"shared/photo", :collection => @photos %>

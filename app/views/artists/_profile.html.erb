@@ -1,5 +1,5 @@
 <h2><span class="fn n"><%= @artist.name %></span>'s Profile
-  <%- if @artist.is_member?(current_person) -%><%= link_to '(Edit)', edit_artist_path(@artist) %><%- end -%></h2>
+  <%- if @artist.member?(current_person) -%><%= link_to '(Edit)', edit_artist_path(@artist) %><%- end -%></h2>
 
 <div class="toolbox">
   <%= image_tag @artist.main_photo, :class => "profile-image photo",
@@ -7,12 +7,12 @@
   <h3><%= @artist.name %></h3>
   <ul class="tools">
     <%- if logged_in? -%>
-        <%- unless @artist.is_member?(current_person) or @artist.is_fan?(current_person) -%>
+        <%- unless @artist.member?(current_person) or @artist.fan?(current_person) -%>
             <li><%= link_to "Become a Fan",
                             :action => 'fan', :id => @artist,
                             :method => :post %></li>
         <%- end -%>
-        <%- if @artist.is_fan?(current_person) -%>
+        <%- if @artist.fan?(current_person) -%>
             <li>You're a fan!
               <%= link_to image_tag('icons/user_delete.png'),
                           "alert('todo')",

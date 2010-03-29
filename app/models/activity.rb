@@ -25,4 +25,13 @@ class Activity < ActiveRecord::Base
          :order => 'activities.created_at DESC',
          :limit => GLOBAL_FEED_SIZE)
   end
+
+  def owner
+    unless artist.nil?
+      artist
+    else
+      person
+    end
+  end
+
 end

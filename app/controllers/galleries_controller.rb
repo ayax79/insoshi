@@ -1,25 +1,35 @@
 class GalleriesController < ApplicationController
+  
+  include GallerySharedFilters
+
   before_filter :login_required
   before_filter :correct_user_required, :only => [ :edit, :update, :destroy ]
-  
+  before_filter :artist_check, :only => [ :new, :create, :update, :destroy ]
+
   def show
     @body = "galleries"
     @gallery = Gallery.find(params[:id])
-    @photos = @gallery.photos.paginate :page => params[:page] 
+    @photos = @gallery.photos.paginate :page => params[:page]
   end
-  
+
   def index
     @body = "galleries"
     @person = Person.find(params[:person_id])
     @galleries = @person.galleries.paginate :page => params[:page]
   end
-  
+
   def new
     @gallery = Gallery.new
   end
-  
+
   def create
-    @gallery = current_person.galleries.build(params[:gallery])
+
+    unless @artist.nil?
+      @gallery = @artist.galleries.build(params[:gallery])
+    else
+      @gallery = current_person.galleries.build(params[:gallery])
+    end
+
     respond_to do |format|
       if @gallery.save
         flash[:success] = "Gallery successfully created"
@@ -29,11 +39,11 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   def edit
     @gallery = Gallery.find(params[:id])
   end
-  
+
   def update
     @gallery = Gallery.find(params[:id])
     respond_to do |format|
@@ -45,7 +55,7 @@ class GalleriesController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     if current_person.galleries.count == 1
       flash[:error] = "You can't delete the final gallery"
@@ -60,17 +70,18 @@ class GalleriesController < ApplicationController
     end
 
   end
- 
+
   private
-  
-    def correct_user_required
-      @gallery = Gallery.find(params[:id])
-      if @gallery.nil?
-        flash[:error] = "No gallery found"
-        redirect_to person_galleries_path(current_person)
-      elsif @gallery.person != current_person
-        flash[:error] = "You are not the owner of this gallery"
-        redirect_to person_galleries_path(@gallery.person)
-      end
+
+  def correct_user_required
+    @gallery = Gallery.find(params[:id])
+    if @gallery.nil?
+      flash[:error] = "No gallery found"
+      redirect_to person_galleries_path(current_person)
+    elsif @artist.nil? && @gallery.person != current_person
+      flash[:error] = "You are not the owner of this gallery"
+      redirect_to person_galleries_path(@gallery.person)
     end
+  end
+
 end

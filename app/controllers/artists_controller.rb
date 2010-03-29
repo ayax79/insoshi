@@ -23,6 +23,7 @@ class ArtistsController < ApplicationController
     # fallback to the Artist.id if the name was not passed in the url
     # artist_link should be used for rendering artist_urls
     @artist = Artist.find(params[:id]) unless @artist
+    @galleries = @artist.galleries.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html
@@ -73,7 +74,7 @@ class ArtistsController < ApplicationController
   def fan
     @artist = Artist.find(params[:id])
     #noinspection RubyDuckType
-    @artist.fans << current_person unless @artist.is_fan?(current_person)
+    @artist.fans << current_person unless @artist.fan?(current_person)
     @artist.save
     respond_to do |format|
       format.html { redirect_to :action => 'show', :id => @artist }
@@ -120,7 +121,7 @@ class ArtistsController < ApplicationController
 
   def member_required
     @artist = Artist.find(params[:id])
-    @artist.is_member? current_person
+    @artist.member? current_person
   end
 
 end

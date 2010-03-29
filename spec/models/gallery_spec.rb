@@ -9,10 +9,10 @@ describe Gallery do
     @gallery.should be_valid
   end
   
-  it "should require person_id" do
+  it "should require person_id or artist_id" do
     @gallery = galleries(:invalid_gallery)
     @gallery.should_not be_valid
-    @gallery.errors.on(:person_id).should_not be_empty
+    @gallery.errors.should_not be_empty
   end
     
   it "should have a max title length" do

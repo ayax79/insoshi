@@ -44,11 +44,11 @@ describe Artist do
   end
 
   it "should say quentin should be a member" do
-    @artist.is_member?(people(:quentin)).should be_true
+    @artist.member?(people(:quentin)).should be_true
   end
 
   it "should say kelly is not a member" do
-    @artist.is_member?(people(:kelly)).should_not be_true
+    @artist.member?(people(:kelly)).should_not be_true
   end
 
   private

@@ -77,6 +77,9 @@ Rails::Initializer.run do |config|
   config.gem 'BlueCloth', :lib => 'bluecloth'
   config.gem 'image_science', :version => '~> 1.2.1'
   config.gem 'RubyInline', :lib => 'inline', :version => '~> 3.8.4'
+  config.gem 'ultrasphinx'
+  config.gem 'rdiscount'
+  config.gem 'pg'
 end
 
 require "#{RAILS_ROOT}/vendor/plugins/jquery_ui_rails_helpers/helpers/tabs_renderer"

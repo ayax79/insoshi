@@ -12,6 +12,7 @@ class Artist < ActiveRecord::Base
            :conditions => ["people.deactivated = ?", false],
            :include => :person
   has_many :members, :class_name => 'ArtistMember'
+  has_many :galleries
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -50,12 +51,12 @@ class Artist < ActiveRecord::Base
                                    :limit => FEED_SIZE)
   end
 
-  def is_member?(person)
+  def member?(person)
     !ArtistMember.find(:first,
                   :conditions => [" person_id = ? and artist_id = ?", person.id, self.id ]).nil?
   end
 
-  def is_fan?(person)
+  def fan?(person)
     fans.include? person
   end
 

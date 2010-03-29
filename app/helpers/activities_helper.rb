@@ -86,7 +86,7 @@ module ActivitiesHelper
         if recent
           %(new gallery #{gallery_link(activity.item)})
         else
-          %(#{person_link_with_image(person)} added a new gallery
+          %(#{gallery_owner_link_with_image(activity.item)} added a new gallery
           #{gallery_link(activity.item)})
         end
       when "Photo"
@@ -166,7 +166,7 @@ module ActivitiesHelper
       when "Person"
         %(#{person_link(person)}'s description changed)
       when "Gallery"
-        %(#{person_link(person)} added a new gallery
+        %(#{gallery_owner_link(activity.item)} added a new gallery
         #{gallery_link(activity.item)})
       when "Photo"
         %(#{person_link(person)} added new
