@@ -4,13 +4,14 @@ class PhotosController < ApplicationController
 
   before_filter :login_required
 
+  before_filter :artist_check,
+                :only => [ :new, :create, :edit, :update, :destroy, :set_primary,
+                           :set_avatar ]
   before_filter :correct_user_required,
                 :only => [ :edit, :update, :destroy, :set_primary,
                            :set_avatar ]
   before_filter :correct_gallery_required, :only => [:new, :create]
-  before_filter :artist_check,
-                :only => [ :edit, :update, :destroy, :set_primary,
-                           :set_avatar ]
+
 
   def index
     redirect_to person_galleries_path(current_person)
@@ -145,5 +146,6 @@ class PhotosController < ApplicationController
       end
     end
   end
+
 end
 

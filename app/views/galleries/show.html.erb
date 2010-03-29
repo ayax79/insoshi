@@ -11,7 +11,7 @@
     <p>
       <% if gallery_editable? @gallery %>
         <%= link_to "Add photo", new_photo_path_handle_artist(@gallery) %> |
-        <%= link_to "Edit gallery", edit_gallery_path_handle_artist(@gallery) %> |
+        <%= link_to "Edit gallery", edit_gallery_path %> |
       <% end %>
       <%= link_to "All galleries", all_galleries_path(@gallery) %>
     </p>

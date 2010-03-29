@@ -4,12 +4,12 @@ module GallerySharedFilters
     unless params[:artist_id].nil?
       @artist = Artist.find(params[:artist_id])
       if @artist.nil? || !@artist.member?(current_person)
-        flash[:error] = "You are nto a member for that artist"
+        flash[:error] = "You are not a member for that artist"
         redirect_to :home
         return
       end
     else
-      @artist = nil
+        @artist = nil
     end
   end
 

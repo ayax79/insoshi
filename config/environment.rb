@@ -80,6 +80,7 @@ Rails::Initializer.run do |config|
   config.gem 'ultrasphinx'
   config.gem 'rdiscount'
   config.gem 'pg'
+  config.gem 'twitter'
 end
 
 require "#{RAILS_ROOT}/vendor/plugins/jquery_ui_rails_helpers/helpers/tabs_renderer"

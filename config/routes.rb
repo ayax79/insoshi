@@ -27,7 +27,6 @@ ActionController::Routing::Routes.draw do |map|
                                    :action => 'verify_email'
   map.resources :people do |person|
      person.resources :messages
-     person.resources :galleries
      person.resources :connections
      person.resources :comments
   end

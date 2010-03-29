@@ -1,10 +1,16 @@
 module GalleriesHelper
 
   def all_galleries_path(gallery)
-    unless gallery.artist.nil?
-      artist_path gallery.artist, :anchor => 'tGalleries'
-    else
-      person_path gallery.person, :anchor => 'tGalleries'
+    if gallery.is_a? Gallery
+      unless gallery.artist.nil?
+        artist_path gallery.artist, :anchor => 'tGalleries'
+      else
+        for_person gallery.person
+      end
+    elsif is_a? Person
+      person_path gallery
+    elsif is_a? Artist
+      artist_path gallery
     end
   end
 
@@ -40,12 +46,15 @@ module GalleriesHelper
     end
   end
 
-  def edit_gallery_path_handle_artist(gallery)
-    unless gallery.artist.nil?
-      edit_gallery_path(:artist_id => gallery.artist.id)
-    else
-      edit_gallery_path
-    end
+  private
+
+  def for_person(person)
+    person_path person, :anchor => 'tGalleries'
   end
+
+  def for_artist(artist)
+    artist_path artist, :anchor => 'tGalleries'
+  end
+
 
 end

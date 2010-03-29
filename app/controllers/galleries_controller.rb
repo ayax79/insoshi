@@ -1,10 +1,11 @@
 class GalleriesController < ApplicationController
   
   include GallerySharedFilters
+  include GalleriesHelper
 
   before_filter :login_required
-  before_filter :correct_user_required, :only => [ :edit, :update, :destroy ]
   before_filter :artist_check, :only => [ :new, :create, :update, :destroy ]
+  before_filter :correct_user_required, :only => [ :edit, :update, :destroy ]
 
   def show
     @body = "galleries"
@@ -42,6 +43,7 @@ class GalleriesController < ApplicationController
 
   def edit
     @gallery = Gallery.find(params[:id])
+    @artist = @gallery.artist
   end
 
   def update
@@ -66,7 +68,7 @@ class GalleriesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to person_galleries_path(current_person) }
+      format.html { redirect_to all_galleries_path(@gallery) }
     end
 
   end
@@ -77,10 +79,11 @@ class GalleriesController < ApplicationController
     @gallery = Gallery.find(params[:id])
     if @gallery.nil?
       flash[:error] = "No gallery found"
-      redirect_to person_galleries_path(current_person)
-    elsif @artist.nil? && @gallery.person != current_person
+      redirect_to all_galleries_path(current_person)
+    elsif (!@gallery.artist.nil? && !@gallery.artist.member?(current_person)) ||
+            (!@gallery.person.nil? && !@gallery.person != current_person)
       flash[:error] = "You are not the owner of this gallery"
-      redirect_to person_galleries_path(@gallery.person)
+      redirect_to all_galleries_path(@gallery)
     end
   end
 
