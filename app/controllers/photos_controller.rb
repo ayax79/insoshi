@@ -88,7 +88,7 @@ class PhotosController < ApplicationController
   def set_primary
     @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.primary?
-      redirect_to person_galleries_path(current_person) and return
+      redirect_to all_galleries_path(@photo.gallery) and return
     end
     # This should only have one entry, but be paranoid.
     @old_primary = @photo.gallery.photos.select(&:primary?)

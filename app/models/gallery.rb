@@ -15,6 +15,7 @@
 
 class Gallery < ActiveRecord::Base
   include ActivityLogger
+  include SharedValidation
 
   attr_accessible :title, :description
 
@@ -85,12 +86,6 @@ class Gallery < ActiveRecord::Base
     else
       activity = Activity.create!(:item => self, :person => person)
       add_activities(:activity => activity, :person => person)
-    end
-  end
-
-  def person_or_artist_required
-    if person_id.nil? and artist_id.nil?
-      errors.add_to_base("Gallery must be tied to an artist or a person")
     end
   end
 

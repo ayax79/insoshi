@@ -23,6 +23,7 @@
 
 class Photo < ActiveRecord::Base
   include ActivityLogger
+  include SharedValidation
   UPLOAD_LIMIT = 5 # megabytes
   
   # attr_accessible is a nightmare with attachment_fu, so use
@@ -30,6 +31,7 @@ class Photo < ActiveRecord::Base
   attr_protected :id, :person_id, :parent_id, :created_at, :updated_at
   
   belongs_to :person
+  belongs_to :artist
   has_attachment :content_type => :image,
                  :storage => :file_system,
                  :max_size => UPLOAD_LIMIT.megabytes,
@@ -47,7 +49,7 @@ class Photo < ActiveRecord::Base
                         :dependent => :destroy
     
   validates_length_of :title, :maximum => 255, :allow_nil => true
-  validates_presence_of :person_id
+  validate :person_or_artist_required
   validates_presence_of :gallery_id
   
   after_create :log_activity
@@ -84,8 +86,13 @@ class Photo < ActiveRecord::Base
   end
   
   def log_activity
+    unless artist.nil?
+      activity = Activity.create!(:item => self, :artist => artist)
+      add_activities(:activity => activity, :artist => artist)
+    else
       activity = Activity.create!(:item => self, :person => person)
       add_activities(:activity => activity, :person => person)
+    end
   end
 
 end
