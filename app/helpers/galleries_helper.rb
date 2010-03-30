@@ -1,16 +1,16 @@
 module GalleriesHelper
 
-  def all_galleries_path(gallery)
-    if gallery.is_a? Gallery
-      unless gallery.artist.nil?
-        artist_path gallery.artist, :anchor => 'tGalleries'
+  def all_galleries_path(obj)
+    if obj.is_a? Gallery
+      unless obj.artist.nil?
+        artist_path obj.artist, :anchor => 'tGalleries'
       else
-        for_person gallery.person
+        for_person obj.person
       end
-    elsif is_a? Person
-      person_path gallery
-    elsif is_a? Artist
-      artist_path gallery
+    elsif obj.is_a? Person
+      person_path obj, :anchor => 'tGalleries'
+    elsif obj.is_a? Artist
+      artist_path obj, :anchor => 'tGalleries'
     end
   end
 
@@ -34,7 +34,7 @@ module GalleriesHelper
     unless gallery.artist.nil?
       gallery.artist.member? current_person
     else
-      current_person? person
+      current_person? gallery.person
     end
   end
 

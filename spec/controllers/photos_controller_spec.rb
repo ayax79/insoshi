@@ -16,6 +16,8 @@ end
 
 describe PhotosController do
 
+  include GalleriesHelper
+
   describe "when not logged in" do
       
     it "should protect the index page" do
@@ -112,7 +114,8 @@ describe PhotosController do
     
     it "should be able to set the photo as primary for the gallery" do
       put :set_primary, :id => @secondary
-      response.should redirect_to(person_galleries_url(@person))
+      flash[:error].should be_nil
+      response.should redirect_to(all_galleries_path(@person))
       
       @secondary = Photo.find(@secondary.id)
       @secondary.primary.should be_true

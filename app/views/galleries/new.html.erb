@@ -23,7 +23,7 @@
 
         <div class="form_row">
           <%= f.submit "Create", :class => "button" %>
-          <%= link_to "Cancel", person_galleries_path(current_person) %>
+          <%= link_to "Cancel", all_galleries_path(@artist || current_person) %>
         </div>
     <%- end -%>
 <%- end -%>

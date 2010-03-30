@@ -1,6 +1,7 @@
 class PhotosController < ApplicationController
 
   include GallerySharedFilters
+  include GalleriesHelper
 
   before_filter :login_required
 
@@ -14,7 +15,11 @@ class PhotosController < ApplicationController
 
 
   def index
-    redirect_to person_galleries_path(current_person)
+    unless params[:artist_id]
+      redirect_to all_galleries_path(Artist.find(params[:artist_id]))
+    else                                                            
+      redirect_to all_galleries_path(current_person)
+    end
   end
 
   def show
@@ -72,7 +77,7 @@ class PhotosController < ApplicationController
 
   def destroy
     @gallery = @photo.gallery
-    redirect_to person_galleries_path(current_person) and return if @photo.nil?
+    redirect_to all_galleries_path(@gallery) and return if @photo.nil?
     @photo.destroy
     flash[:success] = "Photo deleted"
     respond_to do |format|
@@ -90,7 +95,7 @@ class PhotosController < ApplicationController
     respond_to do |format|
       if @photo.update_attributes(:primary => true)
         @old_primary.each { |p| p.update_attributes!(:primary => false) }
-        format.html { redirect_to(person_galleries_path(current_person)) }
+        format.html { redirect_to(all_galleries_path(@photo.gallery)) }
         flash[:success] = "Gallery thumbnail set"
       else
         format.html do

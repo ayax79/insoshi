@@ -81,7 +81,7 @@ class GalleriesController < ApplicationController
       flash[:error] = "No gallery found"
       redirect_to all_galleries_path(current_person)
     elsif (!@gallery.artist.nil? && !@gallery.artist.member?(current_person)) ||
-            (!@gallery.person.nil? && !@gallery.person != current_person)
+            (!@gallery.person.nil? && @gallery.person != current_person)
       flash[:error] = "You are not the owner of this gallery"
       redirect_to all_galleries_path(@gallery)
     end

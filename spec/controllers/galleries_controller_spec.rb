@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe GalleriesController do
+  include GalleriesHelper
+  
   describe "when not logged in" do
       
     it "should protect the index page" do
@@ -51,17 +53,18 @@ describe GalleriesController do
     it "should require the correct user to edit" do
       login_as(:kelly)
       post :edit, :id => @gallery
-      response.should redirect_to(person_galleries_url(@person))
+      response.should redirect_to(all_galleries_path(@gallery))
     end
     
     it "should require the correct user to delete" do
       login_as(:kelly)
       delete :destroy, :id => @gallery
-      response.should redirect_to(person_galleries_url(@person))
+      response.should redirect_to(all_galleries_path(@gallery))
     end
     
     it "should not destroy the final gallery" do
       delete :destroy, :id => @person.galleries.first
+      flash[:error].should be_nil
       flash[:success].should =~ /successfully deleted/
       delete :destroy, :id => @person.reload.galleries.first
       flash[:error].should =~ /can't delete the final gallery/
