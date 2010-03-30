@@ -94,9 +94,16 @@ module ActivitiesHelper
           %(added new #{photo_link(activity.item)}
           #{to_gallery_link(activity.item.gallery)})
         else
-          %(#{person_link_with_image(person)} added a new
-          #{photo_link(activity.item)}
-          #{to_gallery_link(activity.item.gallery)})
+          artist = activity.item.artist
+          unless artist.nil?
+            %(#{artist_link_with_image(artist)} added a new
+            #{photo_link(activity.item)}
+            #{to_gallery_link(activity.item.gallery)})
+          else
+            %(#{person_link_with_image(person)} added a new
+            #{photo_link(activity.item)}
+            #{to_gallery_link(activity.item.gallery)})
+          end
         end
       when "Event"
         event = activity.item
@@ -169,9 +176,16 @@ module ActivitiesHelper
         %(#{gallery_owner_link(activity.item)} added a new gallery
         #{gallery_link(activity.item)})
       when "Photo"
-        %(#{person_link(person)} added new
-        #{photo_link(activity.item)} #{to_gallery_link(activity.item.gallery)})
-        %(#{person_link(person)}'s description has changed.)
+        artist = activity.item.artist
+        unless artist.nil?
+          %(#{artist_link_with_image(artist)} added a new
+            #{photo_link(activity.item)}
+          #{to_gallery_link(activity.item.gallery)})
+        else
+          %(#{person_link_with_image(person)} added a new
+            #{photo_link(activity.item)}
+          #{to_gallery_link(activity.item.gallery)})
+        end
       when "Event"
         %(#{person_link(person)}'s has created a new
         #{event_link("event", activity.item)}.)
@@ -189,7 +203,7 @@ module ActivitiesHelper
         %(#{person_link(person)} has been marked as a member of #{artist_link(artist)})
       when "ExternalItem"
         item = activity.item
-        %(#{person_link(item.person)} posted #{item.description}) 
+        %(#{person_link(item.person)} posted #{item.description})
       else
         raise "Invalid activity type #{activity_type(activity).inspect}"
     end
