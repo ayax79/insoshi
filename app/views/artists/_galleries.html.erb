@@ -4,6 +4,6 @@
 <% end %>
 
 <ul id="gallery_list" class="grid">
-  <%= render :partial => "shared/gallery", :collection => galleries %>
+  <%= render :partial => "artists/gallery", :collection => galleries %>
 </ul>  
 <%= will_paginate(galleries) %>

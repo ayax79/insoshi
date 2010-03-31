@@ -2,6 +2,7 @@ class PhotosController < ApplicationController
 
   include GallerySharedFilters
   include GalleriesHelper
+  include PhotosHelper
 
   before_filter :login_required
 
@@ -115,7 +116,11 @@ class PhotosController < ApplicationController
   def set_avatar
     @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.avatar?
-      redirect_to current_person and return
+      unless @photo.artist.nil?
+        redirect_to @photo.artist and return
+      else
+        redirect_to current_person and return
+      end
     end
     # This should only have one entry, but be paranoid.
     @old_primary = current_person.photos.select(&:avatar?)
@@ -139,8 +144,10 @@ class PhotosController < ApplicationController
   def correct_user_required
     @photo = Photo.find(params[:id])
     if @photo.nil?
+      flash[:error] = "Photo not found"
       redirect_to home_url
-    elsif !current_person?(@photo.person)
+    elsif not photo_editable? @photo
+      flash[:error] = "You are not allowed to edit this photo"
       redirect_to home_url
     end
   end
