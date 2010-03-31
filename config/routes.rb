@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :categories
   map.resources :links
-  map.resources :events, :member => { :attend => :get, 
+  map.resources :events, :member => { :attend => :get,
                                       :unattend => :get } do |event|
     event.resources :comments
   end
@@ -14,23 +14,24 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :photos,
                 :member => { :set_primary => :put, :set_avatar => :put }
   map.open_id_complete 'session', :controller => "sessions",
-                                  :action => "create",
-                                  :requirements => { :method => :get }
+                       :action => "create",
+                       :requirements => { :method => :get }
   map.resource :session
   map.resource :galleries
   map.resources :messages, :collection => { :sent => :get, :trash => :get },
-                           :member => { :reply => :get, :undestroy => :put }
+                :member => { :reply => :get, :undestroy => :put }
 
   map.resources :people, :member => { :verify_email => :get,
                                       :common_contacts => :get }
   map.connect 'people/verify/:id', :controller => 'people',
-                                   :action => 'verify_email'
+              :action => 'verify_email'
   map.resources :people do |person|
-     person.resources :messages
-     person.resources :connections
-     person.resources :comments
+    person.resources :messages
+    person.resources :connections
+    person.resources :comments
+    person.resources :galleries
   end
-  
+
   map.resources :galleries do |gallery|
     gallery.resources :photos
   end
@@ -40,11 +41,11 @@ ActionController::Routing::Routes.draw do |map|
       forums.resources :topics do |topic|
         topic.resources :posts
       end
-    end    
+    end
   end
   map.resources :blogs do |blog|
     blog.resources :posts do |post|
-        post.resources :comments
+      post.resources :comments
     end
   end
 
@@ -54,8 +55,11 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-  map.resources :artists  
-  
+  map.resources :artists do |artists|
+    artists.resources :galleries
+    artists.resources :comments
+  end
+
   map.signup '/signup', :controller => 'people', :action => 'new'
   map.login '/login', :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'

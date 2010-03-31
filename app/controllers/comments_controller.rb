@@ -6,8 +6,8 @@ class CommentsController < ApplicationController
   before_filter :login_required
   before_filter :get_instance_vars
   before_filter :authorize_destroy, :only => [:destroy]
-  before_filter :connection_required
   before_filter :artist_check, :only => [:new, :create]
+  before_filter :connection_required
 
   def index
     redirect_to comments_url
@@ -82,7 +82,7 @@ class CommentsController < ApplicationController
   def connection_required
     if wall?
       _owner = owner
-      unless _owner.is_a?(Person) && connected_to?(_owner)
+      unless _owner.is_a?(Artist) && connected_to?(_owner)
         flash[:notice] = "You must be contacts to complete that action"
         redirect_to owner
       end
@@ -94,7 +94,7 @@ class CommentsController < ApplicationController
     if wall?
       _owner = owner
       if _owner.is_a?(Artist)
-        _owner.member(current_person) or current_person?(@comment.commenter)
+        _owner.member?(current_person) or current_person?(@comment.commenter)
       else
         current_person?(_owner) or current_person?(@comment.commenter)
       end
@@ -122,7 +122,7 @@ class CommentsController < ApplicationController
   # Return a the parent (person or blog post) of the comment.
   def parent
     if wall?
-      @person
+      @artist || @person
     elsif blog?
       @post
     elsif event?
@@ -150,7 +150,11 @@ class CommentsController < ApplicationController
   # Return the URL for the resource comments.
   def comments_url
     if wall?
-      (person_url @person)+'#tWall'  # go directly to comments tab
+      unless @artist.nil?
+        (artist_url @artist)+'#tWall'
+      else
+        (person_url @person)+'#tWall'  # go directly to comments tab
+      end
     elsif blog?
       blog_post_url(@blog, @post)
     elsif event?
