@@ -4,6 +4,7 @@ class Artist < ActiveRecord::Base
 
   MAX_DEFAULT_CONTACTS = 12
   FEED_SIZE = 10
+  NUM_WALL_COMMENTS = 10
 
   has_and_belongs_to_many :fans, :class_name => 'Person', :join_table => 'artists_fans'
   has_many :artist_invites, :dependent => :destroy
@@ -14,6 +15,8 @@ class Artist < ActiveRecord::Base
   has_many :members, :class_name => 'ArtistMember'
   has_many :galleries
   has_many :photos, :dependent => :destroy, :order => 'created_at'
+  has_many :comments, :as => :commentable, :order => 'created_at DESC',
+                      :limit => NUM_WALL_COMMENTS
 
   validates_presence_of :name
   validates_uniqueness_of :name

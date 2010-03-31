@@ -1,4 +1,4 @@
-module GallerySharedFilters
+module SharedFilters
 
   def artist_check
     unless params[:artist_id].nil?

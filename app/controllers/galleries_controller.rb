@@ -1,6 +1,6 @@
 class GalleriesController < ApplicationController
   
-  include GallerySharedFilters
+  include SharedFilters
   include GalleriesHelper
 
   before_filter :login_required

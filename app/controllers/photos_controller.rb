@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
 
-  include GallerySharedFilters
+  include SharedFilters
   include GalleriesHelper
   include PhotosHelper
 

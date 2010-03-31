@@ -5,6 +5,11 @@
       <div class="clear"></div>
   <%- end -%>
 
+  <%- tabs.create('tWall', 'Wall') do -%>
+      <%= render :partial => 'wall' -%>
+      <div class="clear"></div>
+  <%- end -%>
+
   <%- tabs.create('tMembers', 'Members') do -%>
       <%= render :partial => 'profile_members' -%>
       <div class="clear"></div>
@@ -16,14 +21,14 @@
   <%- end -%>
 
   <% tabs.create('tRecentActivity', 'Recent Activity') do %>
-    <%= render :partial => 'recent_activity' %>
-    <div class="clear"></div>
+      <%= render :partial => 'recent_activity' %>
+      <div class="clear"></div>
   <% end %>
 
   <% tabs.create('tGalleries', 'Galleries') do %>
-    <%= render :partial => "artists/galleries",
-               :locals => { :galleries => @galleries } %>
-    <div class="clear"></div>
+      <%= render :partial => "artists/galleries",
+                 :locals => { :galleries => @galleries } %>
+      <div class="clear"></div>
   <% end %>
 
   <%= tabs.render -%>

@@ -1,0 +1,23 @@
+<h2><%= @artist.name %>'s Comment Wall</h2>
+<a name="wall"></a>
+<p><%= formatting_note %></p>
+<% form_for :comment, :url => person_comments_path(@artist) do |f| %>
+
+    <%- unless @artist.nil? -%>
+        <input type="hidden" name="artist_id" value="<%= @artist.id %>"/>
+    <%- end -%>
+
+    <div class="form_row">
+      <%= f.text_area :body, :rows => 2, :cols => 80 %>
+    </div>
+    <div class="form_row">
+      <%= submit_tag "Submit", :class => "button" %>
+    </div>
+<% end %>
+
+<%- unless @artist.comments.empty? -%>
+    <ul class="list comments full">
+      <%= render :partial => 'comment', :collection => @artist.comments %>
+    </ul>
+<%- end -%>
+
