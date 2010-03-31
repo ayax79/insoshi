@@ -1,5 +1,20 @@
-<h2><span class="fn n"><%= @artist.name %></span>'s Profile
-  <%- if @artist.member?(current_person) -%><%= link_to '(Edit)', edit_artist_path(@artist) %><%- end -%></h2>
+<h2><span class="fn n"><%= @artist.name %></span>'s Profile</h2>
+
+<%- if @artist.member? current_person -%>
+    <div class="button-container">
+      <%= link_to "Edit profile", edit_artist_path(@artist) %> |
+      <%= link_to "Change photo", @artist.galleries.first %>
+    </div>
+<%- end -%>
+
+
+<%- if @artist.member? current_person && @artist.description.blank? -%>
+    <div class="error">
+      Your description is blank.
+      <%= link_to "Click here to add a description",
+                  edit_artist_path(@artist) %>
+    </div>
+<%- end -%>
 
 <div class="toolbox">
   <%= image_tag @artist.main_photo, :class => "profile-image photo",
