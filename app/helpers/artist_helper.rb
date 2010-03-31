@@ -15,10 +15,10 @@ module ArtistHelper
       artist = text
       text = artist.name
     end
-    '<span class="imgHoverMarker">' + image_tag(artist.thumbnail) + artist_link(text, artist, html_options) + '</span>'
+    '<span class="imgHoverMarker">' + image_tag(artist.thumbnail) + artist_link_with_options(text, artist, html_options) + '</span>'
   end
 
-  def artist_link(text, artist = nil, html_options = nil)
+  def artist_link_with_options(text, artist = nil, html_options = nil)
     if artist.nil?
       artist = text
       text = artist.name

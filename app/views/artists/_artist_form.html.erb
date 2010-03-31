@@ -16,7 +16,7 @@
     <div class="form_row">
       <%= f.submit btn_message %>
       <% if allow_cancel %>
-        <%= artist_link 'Cancel', @artist %> 
+        <%= artist_link @artist, :name => 'Cancel' %> 
       <% end %>
     </div>
 
