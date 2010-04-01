@@ -36,7 +36,13 @@ module ActivitiesHelper
               %(#{person_link_with_image(activity.item.commenter)}
             commented on #{wall(activity)})
             end
-
+          when "Artist"
+            if recent
+              %(commented on #{wall(activity)})
+            else
+              %(#{artist_link_with_image(activity.item.commenter)}
+            commented on #{wall(activity)})
+            end
         end
       when "Event"
         # TODO: make recent/long versions for this
@@ -150,7 +156,10 @@ module ActivitiesHelper
             #{post_link("blog post", post.blog, post)})
           when "Person"
             %(#{person_link(activity.item.commenter)} commented on
-          #{wall(activity)}.)
+                #{wall(activity)}.)
+          when "Artist"
+            %(#{person_link(activity.item.commenter)} commented on
+                #{wall(activity)}.)
           when "Event"
             event = activity.item.commentable
             %(#{person_link(activity.item.commenter)} commented on
@@ -222,6 +231,8 @@ module ActivitiesHelper
           when "Event"
             "comment.png"
           when "Person"
+            "sound.png"
+          when "Artist"
             "sound.png"
         end
       when "Connection"
