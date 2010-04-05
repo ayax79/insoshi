@@ -65,16 +65,16 @@ class Person < ActiveRecord::Base
   REQUESTED_AND_ACTIVE =  [%(status = ? AND
                             deactivated = ? AND
                             (email_verified IS NULL OR email_verified = ?)),
-                          Connection::REQUESTED, false, true]
+                           Connection::REQUESTED, false, true]
 
   has_one :blog
   has_many :email_verifications
   has_many :comments, :as => :commentable, :order => 'created_at DESC',
-                      :limit => NUM_WALL_COMMENTS
+           :limit => NUM_WALL_COMMENTS
   has_many :connections
   has_many :contacts, :through => :connections,
-                      :conditions => ACCEPTED_AND_ACTIVE,
-                      :order => 'people.created_at DESC'
+           :conditions => ACCEPTED_AND_ACTIVE,
+           :order => 'people.created_at DESC'
   has_many :photos, :dependent => :destroy, :order => 'created_at'
   has_many :requested_contacts, :through => :connections,
            :source => :contact,
@@ -88,9 +88,9 @@ class Person < ActiveRecord::Base
   end
   has_many :feeds
   has_many :activities, :through => :feeds, :order => 'activities.created_at DESC',
-                                            :limit => FEED_SIZE,
-                                            :conditions => ["people.deactivated = ?", false],
-                                            :include => :person
+           :limit => FEED_SIZE,
+           :conditions => ["people.deactivated = ?", false],
+           :include => :person
 
   has_many :page_views, :order => 'created_at DESC'
   has_many :galleries
@@ -102,16 +102,16 @@ class Person < ActiveRecord::Base
   has_many :external_items
 
   has_and_belongs_to_many :fanned_artists, :class_name => 'Artist', :join_table => 'artists_fans'
-  
+
 
   validates_presence_of     :email, :name
-  validates_presence_of     :password,              :if => :password_required?
+  validates_presence_of     :password, :if => :password_required?
   validates_presence_of     :password_confirmation, :if => :password_required?
   validates_length_of       :password, :within => 4..MAX_PASSWORD,
-                                       :if => :password_required?
+                            :if => :password_required?
   validates_confirmation_of :password, :if => :password_required?
   validates_length_of       :email, :within => 6..MAX_EMAIL
-  validates_length_of       :name,  :maximum => MAX_NAME
+  validates_length_of       :name, :maximum => MAX_NAME
   validates_length_of       :description, :maximum => MAX_DESCRIPTION
   validates_format_of       :email,
                             :with => EMAIL_REGEX,
@@ -134,34 +134,34 @@ class Person < ActiveRecord::Base
     # Return the paginated active users.
     def active(page = 1)
       paginate(:all, :page => page,
-                     :per_page => RASTER_PER_PAGE,
-                     :conditions => conditions_for_active)
+               :per_page => RASTER_PER_PAGE,
+               :conditions => conditions_for_active)
     end
-    
+
     # Return the people who are 'mostly' active.
     # People are mostly active if they have logged in recently enough.
     def mostly_active(page = 1)
       paginate(:all, :page => page,
-                     :per_page => RASTER_PER_PAGE,
-                     :conditions => conditions_for_mostly_active,
-                     :order => "created_at DESC")
+               :per_page => RASTER_PER_PAGE,
+               :conditions => conditions_for_mostly_active,
+               :order => "created_at DESC")
     end
-    
+
     # Return *all* the active users.
     def all_active
       find(:all, :conditions => conditions_for_active)
     end
-    
+
     def find_recent
       find(:all, :order => "people.created_at DESC",
-                 :include => :photos, :limit => NUM_RECENT)
+           :include => :photos, :limit => NUM_RECENT)
     end
 
     # Return the first admin created.
     # We suggest using this admin as the primary administrative contact.
     def find_first_admin
       find(:first, :conditions => ["admin = ?", true],
-                   :order => :created_at)
+           :order => :created_at)
     end
   end
 
@@ -190,7 +190,7 @@ class Person < ActiveRecord::Base
 
   def recent_activity
     Activity.find_all_by_person_id(self, :order => 'created_at DESC',
-                                         :limit => FEED_SIZE)
+                                   :limit => FEED_SIZE)
   end
 
   ## For the home page...
@@ -224,9 +224,9 @@ class Person < ActiveRecord::Base
                   { :person => id, :t => TRASH_TIME_AGO }]
     order = 'created_at DESC'
     trashed = Message.paginate(:all, :conditions => conditions,
-                                     :order => order,
-                                     :page => page,
-                                     :per_page => MESSAGES_PER_PAGE)
+                               :order => order,
+                               :page => page,
+                               :per_page => MESSAGES_PER_PAGE)
   end
 
   def recent_messages
@@ -254,7 +254,7 @@ class Person < ActiveRecord::Base
   end
 
   ## Photo helpers
-  
+
   def photo
     # This should only have one entry, but use 'first' to be paranoid.
     photos.find_all_by_avatar(true).first
@@ -385,89 +385,89 @@ class Person < ActiveRecord::Base
     # Horrifyingly, MySQL lacks support for the INTERSECT keyword.
     (contacts & other_person.contacts).paginate(options)
   end
-  
+
   protected
 
-    ## Callbacks
+  ## Callbacks
 
-    # Prepare email for database insertion.
-    def prepare_email
-      self.email = email.downcase.strip if email
-    end
+  # Prepare email for database insertion.
+  def prepare_email
+    self.email = email.downcase.strip if email
+  end
 
-    # Handle the case of a nil description.
-    # Some databases (e.g., MySQL) don't allow default values for text fields.
-    # By default, "blank" fields are really nil, which breaks certain
-    # validations; e.g., nil.length raises an exception, which breaks
-    # validates_length_of.  Fix this by setting the description to the empty
-    # string if it's nil.
-    def handle_nil_description
-      self.description = "" if description.nil?
-    end
+  # Handle the case of a nil description.
+  # Some databases (e.g., MySQL) don't allow default values for text fields.
+  # By default, "blank" fields are really nil, which breaks certain
+  # validations; e.g., nil.length raises an exception, which breaks
+  # validates_length_of.  Fix this by setting the description to the empty
+  # string if it's nil.
+  def handle_nil_description
+    self.description = "" if description.nil?
+  end
 
-    def encrypt_password
-      return if password.blank?
-      self.crypted_password = encrypt(password)
-    end
+  def encrypt_password
+    return if password.blank?
+    self.crypted_password = encrypt(password)
+  end
 
-    def check_config_for_deactivation
-      if Person.global_prefs.whitelist?
-        self.deactivated = true
-      end
+  def check_config_for_deactivation
+    if Person.global_prefs.whitelist?
+      self.deactivated = true
     end
+  end
 
-    def set_old_description
-      @old_description = Person.find(self).description
-    end
+  def set_old_description
+    @old_description = Person.find(self).description
+  end
 
-    def log_activity_description_changed
-      unless @old_description == description or description.blank?
-        add_activities(:item => self, :person => self)
-      end
+  def log_activity_description_changed
+    unless @old_description == description or description.blank?
+      add_activities(:item => self, :person => self)
     end
-    
-    # Clear out all activities associated with this person.
-    def destroy_activities
-      Activity.find_all_by_person_id(self).each {|a| a.destroy}
-    end
-    
-    def destroy_feeds
-      Feed.find_all_by_person_id(self).each {|f| f.destroy}
-    end
+  end
 
-    # Connect new users to "Tom".
-    def connect_to_admin
-      # Find the first admin created.
-      # The ununitiated should Google "tom myspace".
-      tom = Person.find_first_admin
-      unless tom.nil? or tom == self
-        Connection.connect(self, tom)
-      end
-    end
+  # Clear out all activities associated with this person.
+  def destroy_activities
+    Activity.find_all_by_person_id(self).each {|a| a.destroy}
+  end
 
-    ## Other private method(s)
+  def destroy_feeds
+    Feed.find_all_by_person_id(self).each {|f| f.destroy}
+  end
 
-    def password_required?
-      (crypted_password.blank? && identity_url.nil?) || !password.blank? ||
-      !verify_password.nil?
+  # Connect new users to "Tom".
+  def connect_to_admin
+    # Find the first admin created.
+    # The ununitiated should Google "tom myspace".
+    tom = Person.find_first_admin
+    unless tom.nil? or tom == self
+      Connection.connect(self, tom)
     end
-    
-    class << self
-    
-      # Return the conditions for a user to be active.
-      def conditions_for_active
-        [%(deactivated = ? AND 
+  end
+
+  ## Other private method(s)
+
+  def password_required?
+    (crypted_password.blank? && identity_url.nil?) || !password.blank? ||
+            !verify_password.nil?
+  end
+
+  class << self
+
+    # Return the conditions for a user to be active.
+    def conditions_for_active
+      [%(deactivated = ? AND
            (email_verified IS NULL OR email_verified = ?)),
-         false, true]
-      end
-      
-      # Return the conditions for a user to be 'mostly' active.
-      def conditions_for_mostly_active
-        [%(deactivated = ? AND 
+       false, true]
+    end
+
+    # Return the conditions for a user to be 'mostly' active.
+    def conditions_for_mostly_active
+      [%(deactivated = ? AND
            (email_verified IS NULL OR email_verified = ?) AND
            (last_logged_in_at IS NOT NULL AND
             last_logged_in_at >= ?)),
-         false, true, TIME_AGO_FOR_MOSTLY_ACTIVE]
-      end
+       false, true, TIME_AGO_FOR_MOSTLY_ACTIVE]
     end
+  end
 end

@@ -180,6 +180,73 @@ describe Comment do
       end
     end
   end
+
+
+  describe "artist wall comments" do
+
+    before(:each) do
+      @artist = artists(:foobars)
+      @comment = @artist.comments.unsafe_build(:body => "Hey there",
+                                               :commenter => people(:aaron))
+    end
+
+    it "should be valid" do
+      @comment.should be_valid
+    end
+
+    it "should require a body" do
+      comment = @artist.comments.new
+      comment.should_not be_valid
+      comment.errors.on(:body).should_not be_empty
+    end
+
+    it "should have a maximum body length" do
+      @comment.should have_maximum(:body, MEDIUM_TEXT_LENGTH)
+    end
+
+    it "should increase the comment count" do
+      old_count = @artist.comments.count
+      @comment.save!
+      @artist.comments.count.should == old_count + 1
+    end
+
+    describe "associations" do
+
+      before(:each) do
+        @comment.save!
+      end
+
+      it "should have an activity" do
+        Activity.find_by_item_id(@comment).should_not be_nil
+      end
+    end
+
+    describe "email notifications" do
+
+      before(:each) do
+        @emails = ActionMailer::Base.deliveries
+        @emails.clear
+        @global_prefs = Preference.find(:first)
+        @recipient = people(:quentin)
+      end
+
+      it "should send an email when global/recipient notifications are on" do
+        # Both notifications are on by default.
+        lambda do
+          @comment.save
+        end.should change(@emails, :length).by(2)
+      end
+
+
+      it "should not send an email for an own-comment" do
+        lambda do
+          @artist.comments.create(:body => "Hey there",
+                                  :commenter => @person)
+        end.should_not change(@emails, :length)
+      end
+    end
+  end
+
   
   describe "feed items for contacts" do
 

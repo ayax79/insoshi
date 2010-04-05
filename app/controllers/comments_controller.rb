@@ -1,12 +1,10 @@
 # NOTE: We use "comments" for both wall topic comments and blog comments,
 # There is some trickery to handle the two in a unified manner.
 class CommentsController < ApplicationController
-  include SharedFilters
 
   before_filter :login_required
   before_filter :get_instance_vars
   before_filter :authorize_destroy, :only => [:destroy]
-  before_filter :artist_check, :only => [:new, :create]
   before_filter :connection_required
 
   def index
@@ -55,11 +53,8 @@ class CommentsController < ApplicationController
 
   def get_instance_vars
     if wall?
-      unless params[:artist_id].nil?
-        @artist = Artist.find(params[:artist_id])
-      else
-        @person = Person.find(params[:person_id])
-      end
+      @artist = params[:artist_id] unless params[:artist_id].nil?
+      @person = Person.find(params[:person_id]) unless params[:person_id].nil?
     elsif blog?
       @blog = Blog.find(params[:blog_id])
       @post = Post.find(params[:post_id])
@@ -70,7 +65,11 @@ class CommentsController < ApplicationController
 
   def owner
     if wall?
-      @artist || @person
+      unless @artist.nil?
+        @artist
+      else
+        @person
+      end
     elsif blog?
       @blog.person
     elsif event?
@@ -82,8 +81,11 @@ class CommentsController < ApplicationController
   def connection_required
     if wall?
       _owner = owner
-      unless _owner.is_a?(Artist) && connected_to?(_owner)
+      if _owner.is_a?(Person) && !connected_to?(_owner)
         flash[:notice] = "You must be contacts to complete that action"
+        redirect_to owner
+      elsif _owner.is_a?(Artist) && !_owner.fan?(current_person)
+        flash[:notice] = "You must become a fan of this artist first"
         redirect_to owner
       end
     end
@@ -175,4 +177,5 @@ class CommentsController < ApplicationController
   def event?
     !params[:event_id].nil?
   end
+
 end

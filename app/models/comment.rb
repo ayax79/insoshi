@@ -16,7 +16,7 @@ class Comment < ActiveRecord::Base
   include ActivityLogger
   extend PreferencesHelper
 
-  attr_accessor :commented_person, :send_mail
+  attr_accessor :commented_person, :commented_artist, :send_mail
 
   attr_accessible :body
 
@@ -54,10 +54,17 @@ class Comment < ActiveRecord::Base
     end
   end
 
+  def commented_artist
+    @commented_artist ||= case commentable.class.to_s
+      when "Artist"
+        commentable
+    end
+  end
+
   private
 
   def wall_comment?
-    commentable.class.to_s == "Person"
+    commentable.is_a?(Person) || commentable.is_a?(Artist)
   end
 
   def blog_post_comment?
@@ -86,15 +93,43 @@ class Comment < ActiveRecord::Base
   end
 
   def send_receipt_reminder
-    return if commenter == commented_person
-    if wall_comment?
-      @send_mail ||= Comment.global_prefs.email_notifications? &&
-              commented_person.wall_comment_notifications?
-      PersonMailer.deliver_wall_comment_notification(self) if @send_mail
-    elsif blog_post_comment?
-      @send_mail ||= Comment.global_prefs.email_notifications? &&
-              commented_person.blog_comment_notifications?
-      PersonMailer.deliver_blog_comment_notification(self) if @send_mail
+    return if commenter == commented_person or commented_by_member?
+
+    unless commented_artist.nil?
+      if wall_comment?
+        commented_artist.members.each do |artist_member|
+          person = artist_member.person
+          PersonMailer.deliver_wall_comment_notification(ArtistMailComment.new(person, self))
+        end
+      end
+    else
+      if wall_comment?
+        @send_mail ||= Comment.global_prefs.email_notifications? &&
+                commented_person.wall_comment_notifications?
+        PersonMailer.deliver_wall_comment_notification(self) if @send_mail
+      elsif blog_post_comment?
+        @send_mail ||= Comment.global_prefs.email_notifications? &&
+                commented_person.blog_comment_notifications?
+        PersonMailer.deliver_blog_comment_notification(self) if @send_mail
+      end
     end
   end
+
+  def commented_by_member?
+    !@artist.nil? and @artist.members.include?(commenter)
+  end
+
+  class ArtistMailComment
+
+    attr_reader :commented_person, :commentable, :commenter
+
+    def initialize(person, comment)
+      @commented_person = person
+      @commenter = comment.commenter
+      @commentable = comment.commentable
+    end
+
+  end
+
 end
+
