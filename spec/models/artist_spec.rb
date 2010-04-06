@@ -51,14 +51,11 @@ describe Artist do
     @artist.member?(people(:kelly)).should_not be_true
   end
 
-  private
-
-  def create_artist(options ={})
-    a = Artist.new(options)
-    a.valid?
-    a.save if options[:save]
-    a
+  it "should have a blog upon creation" do
+    artist = Artist.create! :name => 'blop'
+    artist.blog.should_not be_nil
   end
+
 
   describe "activity associations" do
 
@@ -97,6 +94,15 @@ describe Artist do
 #      person.destroy
 #      initial_person.reload.activities.length.should == 0
 #    end
+  end
+
+  private
+
+  def create_artist(options ={})
+    a = Artist.new(options)
+    a.valid?
+    a.save if options[:save]
+    a
   end
 
 end

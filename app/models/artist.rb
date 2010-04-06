@@ -25,6 +25,9 @@ class Artist < ActiveRecord::Base
   before_update :set_old_description
   after_update :log_activity_description_changed
 
+  #noinspection RailsParamDefResolve
+  after_create :create_blog
+
   #photo helpers
   
   def photo
