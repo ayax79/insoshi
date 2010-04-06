@@ -10,8 +10,13 @@
 #
 
 class Blog < ActiveRecord::Base
+  include SharedValidation
+
   belongs_to :person
   belongs_to :artist
   has_many :posts, :order => "created_at DESC", :dependent => :destroy,
                    :class_name => "BlogPost"
+
+  validate :person_or_artist_required
+
 end
