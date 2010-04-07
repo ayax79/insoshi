@@ -19,4 +19,12 @@ class Blog < ActiveRecord::Base
 
   validate :person_or_artist_required
 
+  def owner
+    unless artist.nil?
+      artist
+    else
+      person
+    end
+  end
+
 end
