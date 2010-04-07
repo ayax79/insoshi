@@ -25,6 +25,11 @@
       <div class="clear"></div>
   <% end %>
 
+  <% tabs.create('tBlog', 'Blog') do %>
+    <%= render :partial => 'shared/blog' %>
+    <div class="clear"></div>
+  <% end %>
+
   <% tabs.create('tGalleries', 'Galleries') do %>
       <%= render :partial => "artists/galleries",
                  :locals => { :galleries => @galleries } %>
