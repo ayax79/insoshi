@@ -102,7 +102,12 @@ class PostsController < ApplicationController
       if forum?
         true  # This will change once there are groups
       elsif blog?
-        redirect_to home_url unless current_person?(@blog.person)
+        unless @blog.artist.nil?
+          redirect_to home_url unless @blog.artist.member? current_person
+
+        else
+          redirect_to home_url unless current_person?(@blog.person)
+        end
       end
     end
 
