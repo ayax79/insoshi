@@ -24,6 +24,8 @@ class ArtistsController < ApplicationController
     # artist_link should be used for rendering artist_urls
     @artist = Artist.find(params[:id]) unless @artist
     @galleries = @artist.galleries.paginate(:page => params[:page])
+    @blog = @artist.blog
+    @posts = @artist.blog.posts.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html
