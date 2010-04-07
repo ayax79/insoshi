@@ -7,12 +7,21 @@ module ActivitiesHelper
       when "BlogPost"
         post = activity.item
         blog = post.blog
-        view_blog = blog_link("#{h person.name}'s blog", blog)
+        unless blog.artist.nil?
+          view_blog = blog_link("#{h blog.artist.name}'s blog", blog)
+        else
+          view_blog = blog_link("#{h person.name}'s blog", blog)
+        end
         if recent
           %(new blog post  #{post_link(blog, post)})
         else
-          %(#{person_link_with_image(person)} posted
-          #{post_link(blog, post)} &mdash; #{view_blog})
+          unless blog.artist.nil?
+            %(#{artist_link_with_image(blog.artist)} posted
+            #{post_link(blog, post)} &mdash; #{view_blog})
+          else
+            %(#{person_link_with_image(person)} posted
+            #{post_link(blog, post)} &mdash; #{view_blog})
+          end
         end
       when "Comment"
         parent = activity.item.commentable
@@ -142,8 +151,13 @@ module ActivitiesHelper
       when "BlogPost"
         post = activity.item
         blog = post.blog
-        %(#{person_link(person)} made a
-        #{post_link("new blog post", blog, post)})
+        unless blog.artist.nil?
+          %(#{artist_link(blog.artist)} made a
+          #{post_link("new blog post", blog, post)})
+        else
+          %(#{person_link(person)} made a
+          #{post_link("new blog post", blog, post)})
+        end
       when "Comment"
         parent = activity.item.commentable
         parent_type = parent.class.to_s
