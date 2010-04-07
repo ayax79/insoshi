@@ -17,3 +17,8 @@ blog_post:
   person_id: quentin
   body: MyText
   type: BlogPost
+
+artist_blog_post:
+  blog: nine
+  body: Stuff entered here
+  type: BlogPost

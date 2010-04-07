@@ -15,25 +15,38 @@
 #
 
 class BlogPost < Post
-  
+
   MAX_TITLE = MEDIUM_STRING_LENGTH
   MAX_BODY  = MAX_TEXT_LENGTH
-  
+
   attr_accessible :title, :body
-  
+
   belongs_to :blog
   has_many :comments, :as => :commentable, :order => :created_at,
-                      :dependent => :destroy
-  
+           :dependent => :destroy
+
   validates_presence_of :title, :body
   validates_length_of :title, :maximum => MAX_TITLE
   validates_length_of :body, :maximum => MAX_BODY
-  
+
   after_create :log_activity
-  
+
+  def owner
+    unless blog.artist.nil?
+      blog.artist
+    else
+      blog.person
+    end
+  end
+
   private
-  
-    def log_activity
+
+  def log_activity
+    unless blog.artist.nil?
+      add_activities(:item => self, :artist => blog.artist)
+    else
       add_activities(:item => self, :person => blog.person)
     end
+  end
+
 end

@@ -78,4 +78,14 @@ describe BlogPost do
       end
     end
   end
+
+  describe "Artist Blog Posts" do
+
+    it "should exist" do
+      posts(:artist_blog_post).should_not be_nil
+    end
+
+  end
+
+
 end

@@ -30,6 +30,10 @@ class PostsController < ApplicationController
   def new
     @post = model.new
 
+    unless @blog.nil? or  @blog.artist.nil?
+      @artist = @blog.artist
+    end
+
     respond_to do |format|
       format.html { render :action => resource_template("new") }
     end
