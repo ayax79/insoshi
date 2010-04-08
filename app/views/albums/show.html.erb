@@ -1,0 +1,4 @@
+<%= @album.title %> : <%= @artist.name %>
+
+<%= image_tag @album.public_filename, :class => "profile-image photo",
+                :alt => h(@album.title) %>

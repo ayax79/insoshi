@@ -17,6 +17,7 @@ class Artist < ActiveRecord::Base
   has_many :photos, :dependent => :destroy, :order => 'created_at'
   has_many :comments, :as => :commentable, :order => 'created_at DESC',
                       :limit => NUM_WALL_COMMENTS
+  has_many :albums
   has_one :blog
 
   validates_presence_of :name
