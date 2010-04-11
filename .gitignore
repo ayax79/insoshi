@@ -16,6 +16,7 @@ db/*.sqlite3*
 public/photos/*
 public/thumbnails
 public/albums/*
+public/album_thumbnails/*
 uuid.state
 nbproject*
 index/*
