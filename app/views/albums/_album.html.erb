@@ -1,0 +1,7 @@
+<li class="vcard album">
+<div class="album-image">
+<%= link_to image_tag album.public_filename(:thumbnail), :class => "album-image photo",
+                :alt => h(album.title) %>
+</div>
+<%= artist_album_link(album) %>
+</li>

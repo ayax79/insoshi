@@ -26,6 +26,7 @@ class ArtistsController < ApplicationController
     @galleries = @artist.galleries.paginate(:page => params[:page])
     @blog = @artist.blog
     @posts = @artist.blog.posts.paginate(:page => params[:page])
+    @albums = @artist.albums.paginate(:page => params[:page])
 
     respond_to do |format|
       format.html

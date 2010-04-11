@@ -344,6 +344,14 @@ module ActivitiesHelper
     link_to(h(text), artist_path(artist))
   end
 
+  def artist_album_link(text, album=nil)
+    if album.nil?
+      album = text
+      text = album.title
+    end
+    link_to(h(text), artist_album_path(album.artist, album))
+  end
+
   # Return a link to the wall.
   def wall(activity)
     commenter = activity.person

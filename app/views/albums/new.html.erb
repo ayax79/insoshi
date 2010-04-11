@@ -1,17 +1,17 @@
 <h2>Add a Album</h2>
 <%= error_messages_for :album %>
 
-<h3>Select New Image</h3>
-<% form_for album, :url=>{:controller => :albums, :action => :create, :artist_id => @artist}, :html => { :multipart => true } do |f| -%>
-    <div class="form_field">
-      <%= f.file_field :uploaded_data %>
-    </div>
+<% form_for @album, :url=>{:controller => :albums, :action => :create, :artist_id => @artist}, :html => { :multipart => true } do |f| -%>
     <div class="form_field">
       <%= f.label :title %>
       <%= f.text_field :title %>
     </div>
     <div class="form_field">
+      <%= f.label :uploaded_data, 'Album Photo' %>
+      <%= f.file_field :uploaded_data %>
+    </div>
+    <div class="form_field">
       <%= submit_tag 'Upload', :class => 'button' %>
-      <%= link_to 'Cancel', @album, :class => "button", :id => "cancel" %>
+      <%= link_to 'Cancel', artist_path(@artist, :anchor => 'tAlbums'), :class => "button", :id => "cancel" %>
     </div>
 <% end -%>

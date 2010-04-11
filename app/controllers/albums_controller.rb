@@ -1,7 +1,9 @@
 class AlbumsController < ApplicationController
-  include SharedValidation
+  include SharedFilters
 
-  before_filter :person_or_artist_required, :only => [:new, :create]
+  before_filter :artist_check, :only => [:new, :create]
+  before_filter :artist_check, :only => [:new, :create]
+
 
   def index
     @albums = Album.paginate(:all, :page => params[:page], :order => :title)
@@ -21,14 +23,33 @@ class AlbumsController < ApplicationController
   end
 
   def new
-    @album = Album.new
+    @album = Album.new(:artist => @artist)
   end
 
   def create
-    @album = Album.new(params[:album])
+    if params[:album].nil?
+      flash[:error] = "Your browser doesn't appear to support file uploading"
+      redirect_to artist_path @artist, :anchor => 'tAlbums' and return
+    end
+    album_data = params[:album].merge(:artist => @artist)
+    @album = @artist.albums.build(album_data)
 
     respond_to do |format|
-      format.html { redirect_to(:artist, :anchor => "tAlbums")  }
+      if @album.save
+        flash[:notice] = "Album created successfully"
+        format.html { redirect_to(@artist, :anchor => "tAlbums")  }
+      else
+        format.html { render :action => 'new' }
+      end
+    end
+  end
+
+  private
+
+  def artist_required
+    if @artist.nil?
+      flash[:error] = "No artist was specified"
+      redirect_to home_url
     end
   end
 

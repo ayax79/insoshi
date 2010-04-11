@@ -36,6 +36,12 @@
       <div class="clear"></div>
   <% end %>
 
+  <% tabs.create('tAlbums', 'Albums') do %>
+      <%= render :partial => "albums/albums",
+                 :locals => { :albums => @albums }%>
+      <div class="clear"></div>
+  <% end %>
+
   <%= tabs.render -%>
 </div>
 <script type='text/javascript'>

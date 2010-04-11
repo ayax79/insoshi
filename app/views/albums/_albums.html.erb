@@ -1,0 +1,9 @@
+<h2><%= @artist.name %>'s Galleries </h2>
+<% if @artist.member? current_person %>
+  <%= link_to "Add Album", new_artist_album_path(:artist_id => @artist.id) %>
+<% end %>
+
+<ul id="album_list" class="list">
+  <%= render :partial => "albums/album", :collection => albums %>
+</ul>
+<%= will_paginate(albums) %>
