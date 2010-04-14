@@ -35,3 +35,4 @@ config/ultrasphinx/*.conf
 *.swp
 .idea
 nohup.out
+public/songs/*
