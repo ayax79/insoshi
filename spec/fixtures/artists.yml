@@ -2,3 +2,7 @@ foobars:
   name: foobars
   description: We are a band and we suck.
   fans: kelly, admin
+
+led_zeppelin:
+  name: Led Zeppelin
+  description: Kicks ass

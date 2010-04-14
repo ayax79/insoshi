@@ -1,0 +1,5 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+over_the_hills:
+  title: Over the hills and far away
+  album: :houses_of_the_holy

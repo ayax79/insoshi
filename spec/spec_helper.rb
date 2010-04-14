@@ -48,9 +48,19 @@ Spec::Runner.configure do |config|
   
   # Simulate an uploaded file.
   def uploaded_file(filename, content_type = "image/png")
-    t = Tempfile.new(filename)
+    begin
+      t = Tempfile.new(filename)
+    rescue
+      # for some reason, the previous call seems to fail for mp3
+      t = Tempfile.new(filename, "/tmp")
+    end
     t.binmode
-    path = File.join(RAILS_ROOT, "spec", "images", filename)
+    if content_type =~ /audio/
+      path = File.join(RAILS_ROOT, "spec", "audio", filename)
+    else
+      path = File.join(RAILS_ROOT, "spec", "images", filename)
+    end
+
     FileUtils.copy_file(path, t.path)
     (class << t; self; end).class_eval do
       alias local_path path

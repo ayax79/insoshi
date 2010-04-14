@@ -10,8 +10,8 @@ describe Album do
 
   it "should create a new instance given valid attributes" do
     Album.create!({ :uploaded_data => @image,
-                :artist        => @artist,
-                :title       => @title }).should_not be_nil
+                    :artist        => @artist,
+                    :title       => @title }).should_not be_nil
   end
 
   it "should require an artist" do
@@ -30,6 +30,10 @@ describe Album do
     lambda do
       Album.create! :artist => @artist, :uploaded_data => @image
     end.should raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should have songs" do
+    albums(:houses_of_the_holy).songs.should contain songs(:over_the_hills)
   end
 
 end

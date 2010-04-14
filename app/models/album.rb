@@ -5,6 +5,7 @@ class Album < ActiveRecord::Base
   attr_protected :id, :artist_id, :parent_id, :created_at, :updated_at
 
   belongs_to :artist
+  has_many :songs 
 
   has_attachment :content_type => :image,
                  :storage => :file_system,
