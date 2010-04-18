@@ -65,52 +65,52 @@ namespace :mongrel do
   end
 end
 
-namespace :rc do
-  require 'rubygems'
-  require 'httparty'
-  require 'yaml'
-
-  RC_SERVER = ENV["RC_SERVER"] || "74.208.174.238"
-  RC_PORT = ENV["RC_PORT"] || 23432
-
-  task :restart do
-    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_restart"
-    puts "executing put -> " + cmd
-    puts HTTParty::put cmd, :query => {:token => get_token}
-  end
-
-  task :start do
-    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_start"
-    puts "executing put -> " + cmd
-    puts HTTParty::put cmd, :query => {:token => get_token}
-  end
-
-  task :stop do
-    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_stop"
-    puts "executing put -> " + cmd
-    puts HTTParty::put cmd, :query => {:token => get_token}
-  end
-
-  task :migrate do
-    cmd = "http://#{RC_SERVER}:#{RC_PORT}/db_migrate"
-    puts "executing put -> " + cmd
-    puts HTTParty::put cmd, :query => {:token => get_token}
-  end
-
-  def get_token
-    username = ENV['USER'] || ENV['USERNAME']
-    YAML::load_documents(File.open(File.join(File.dirname(__FILE__), 'config', 'rc.yml'))) do |doc|
-      doc.each_pair do |key, val|
-        current_username = key
-        current_token = val['token']
-        return current_token if current_username == username
-      end
-    end
-
-    raise NameError, "Could not find a token for user #{username}, add one to config/rc.yml and push to server"
-  end
-
-end
+#namespace :rc do
+#  require 'rubygems'
+#  require 'httparty'
+#  require 'yaml'
+#
+#  RC_SERVER = ENV["RC_SERVER"] || "74.208.174.238"
+#  RC_PORT = ENV["RC_PORT"] || 23432
+#
+#  task :restart do
+#    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_restart"
+#    puts "executing put -> " + cmd
+#    puts HTTParty::put cmd, :query => {:token => get_token}
+#  end
+#
+#  task :start do
+#    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_start"
+#    puts "executing put -> " + cmd
+#    puts HTTParty::put cmd, :query => {:token => get_token}
+#  end
+#
+#  task :stop do
+#    cmd = "http://#{RC_SERVER}:#{RC_PORT}/server_stop"
+#    puts "executing put -> " + cmd
+#    puts HTTParty::put cmd, :query => {:token => get_token}
+#  end
+#
+#  task :migrate do
+#    cmd = "http://#{RC_SERVER}:#{RC_PORT}/db_migrate"
+#    puts "executing put -> " + cmd
+#    puts HTTParty::put cmd, :query => {:token => get_token}
+#  end
+#
+#  def get_token
+#    username = ENV['USER'] || ENV['USERNAME']
+#    YAML::load_documents(File.open(File.join(File.dirname(__FILE__), 'config', 'rc.yml'))) do |doc|
+#      doc.each_pair do |key, val|
+#        current_username = key
+#        current_token = val['token']
+#        return current_token if current_username == username
+#      end
+#    end
+#
+#    raise NameError, "Could not find a token for user #{username}, add one to config/rc.yml and push to server"
+#  end
+#
+#end
 
 
 
