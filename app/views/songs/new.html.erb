@@ -1,7 +1,7 @@
-<h2>Add a Album</h2>
-<%= error_messages_for :album %>
+<h2>Add a Song</h2>
+<%= error_messages_for :song %>
 
-<% form_for @album, :url=>{:controller => :songs, :action => :create, :album_id => @album}, :html => { :multipart => true } do |f| -%>
+<% form_for @song, :url => { :controller => :songs, :action => :create, :album_id => @album }, :html => { :multipart => true } do |f| -%>
     <div class="form_field">
       <%= f.label :title %>
       <%= f.text_field :title %>
@@ -12,6 +12,6 @@
     </div>
     <div class="form_field">
       <%= submit_tag 'Upload', :class => 'button' %>
-      <%= link_to 'Cancel', artist_path(@artist, :anchor => 'tAlbums'), :class => "button", :id => "cancel" %>
+      <%= album_link @album, :name => 'Cancel', :class => 'button', :id => 'cancel' %> 
     </div>
-<% end %>
+<%- end -%>

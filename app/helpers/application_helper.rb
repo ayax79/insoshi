@@ -187,6 +187,17 @@ module ApplicationHelper
             :class => options[:class]
   end
 
+  def album_link(album, options={})
+    link_to options[:name].nil? ? artist.name : options[:name],
+            { :controller => "albums", :action => "show", :id => album, :artist_id => album.artist },
+            options
+  end
+
+  def album_path(album)
+    url_for :controller => "albums", :action => "show", :id => album, :artist_id => album.artist   
+  end
+
+
   def accept_artist_link(invite)
     link_to 'Yes', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => true
   end
