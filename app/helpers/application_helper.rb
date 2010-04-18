@@ -194,7 +194,7 @@ module ApplicationHelper
   end
 
   def album_path(album)
-    url_for :controller => "albums", :action => "show", :id => album, :artist_id => album.artist   
+    url_for :controller => "albums", :action => "show", :id => album, :artist_id => album.artist
   end
 
 
@@ -204,6 +204,10 @@ module ApplicationHelper
 
   def deny_artist_link(invite)
     link_to 'No', :controller => 'artists', :action => 'accept_member_invite', :id => invite, :accept => false
+  end
+
+  def swf_path(source)
+    compute_public_path(source, 'swf')
   end
 
   private
@@ -240,8 +244,5 @@ module ApplicationHelper
   def no_paragraph_tag?(text)
     text !~ /^\<p/
   end
-
-
-
 
 end

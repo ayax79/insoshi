@@ -81,6 +81,7 @@ Rails::Initializer.run do |config|
   config.gem 'rdiscount'
   config.gem 'pg'
   config.gem 'twitter'
+  config.gem 'builder', :version => '~> 2.1.2'
 end
 
 require "#{RAILS_ROOT}/vendor/plugins/jquery_ui_rails_helpers/helpers/tabs_renderer"

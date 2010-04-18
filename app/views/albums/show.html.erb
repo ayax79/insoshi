@@ -1,8 +1,26 @@
-
 <h2><%= @album.title %> : <%= @artist.name %></h2>
-<h5><%=link_to 'Add Songs', new_artist_album_song_path(:album_id => @album, :artist_id => @album.artist) %></h5>
+<h5><%= link_to 'Add Songs', new_artist_album_song_path(:album_id => @album, :artist_id => @album.artist) %></h5>
 
-<div class="album-info">
-<%= image_tag @album.public_filename, :class => "profile-image photo",
-                :alt => h(@album.title) %>
-</div>
+<% column_div :type => :primary do %>
+    <div class="album-info">
+      <%= image_tag @album.public_filename, :class => "profile-image photo",
+                    :alt => h(@album.title) %>
+    </div>
+<% end %>
+
+<% column_div :type => :secondary do %>
+    <%= javascript_include_tag 'swfobject' %>
+    <div id="flashPlayer">
+      This text will be replaced by the flash music player.
+    </div>
+<% end %>
+
+
+<script type="text/javascript">
+//    $(function() {
+        var so = new SWFObject("<%= swf_path 'playerMultipleList.swf' %>", "player", "295", "200", "7", "#FFFFFF");
+        so.addVariable("autoPlay", "no");
+        so.addVariable("playlistPath", '<%= url_for :controller => 'songs', :action => 'index', :format => 'xml', :album_id => @album.id %>');
+        so.write("flashPlayer");
+//    });
+</script>

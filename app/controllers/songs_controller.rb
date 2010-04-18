@@ -1,3 +1,5 @@
+require "builder"
+
 class SongsController < ApplicationController
 
   include SharedFilters
@@ -5,7 +7,7 @@ class SongsController < ApplicationController
 
   before_filter :prepare_artist, :only => [:new, :create]
   before_filter :require_member, :only => [:new, :create]
-  before_filter :album_required, :only => [:new, :create]
+  before_filter :album_required, :only => [:new, :create, :index]
 
   def new
     @song = Song.new
@@ -30,6 +32,14 @@ class SongsController < ApplicationController
       else
         format.html { render :action => "new" }
       end
+    end
+  end
+
+  def index
+    @songs = @album.songs
+
+    respond_to do |format|
+      format.xml 
     end
   end
 
