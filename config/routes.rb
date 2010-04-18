@@ -58,7 +58,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :artists do |artists|
     artists.resources :galleries
     artists.resources :comments
-    artists.resources :albums
+    artists.resources :albums do |albums|
+      albums.resources :songs
+    end
   end
 
   map.signup '/signup', :controller => 'people', :action => 'new'

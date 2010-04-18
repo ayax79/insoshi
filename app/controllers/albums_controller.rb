@@ -2,7 +2,7 @@ class AlbumsController < ApplicationController
   include SharedFilters
 
   before_filter :artist_check, :only => [:new, :create]
-  before_filter :artist_check, :only => [:new, :create]
+  before_filter :require_member, :only => [:new, :create]
 
 
   def index
@@ -19,11 +19,15 @@ class AlbumsController < ApplicationController
 
     respond_to do |format|
       format.html
-    end
+    end                               
   end
 
   def new
     @album = Album.new(:artist => @artist)
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
@@ -44,13 +48,5 @@ class AlbumsController < ApplicationController
     end
   end
 
-  private
-
-  def artist_required
-    if @artist.nil?
-      flash[:error] = "No artist was specified"
-      redirect_to home_url
-    end
-  end
 
 end

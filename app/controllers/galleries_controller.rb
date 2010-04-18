@@ -4,7 +4,8 @@ class GalleriesController < ApplicationController
   include GalleriesHelper
 
   before_filter :login_required
-  before_filter :artist_check, :only => [ :new, :create, :update, :destroy ]
+  before_filter :prepare_artist
+  before_filter :require_member_if_artist, :only => [ :new, :create, :update, :destroy ]
   before_filter :correct_user_required, :only => [ :edit, :update, :destroy ]
 
   def show

@@ -5,8 +5,9 @@ class PhotosController < ApplicationController
   include PhotosHelper
 
   before_filter :login_required
+  before_filter :prepare_artist
 
-  before_filter :artist_check,
+  before_filter :require_member_if_artist,
                 :only => [ :new, :create, :edit, :update, :destroy, :set_primary,
                            :set_avatar ]
   before_filter :correct_user_required,

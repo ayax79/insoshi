@@ -1,4 +1,8 @@
-<%= @album.title %> : <%= @artist.name %>
 
+<h2><%= @album.title %> : <%= @artist.name %></h2>
+<h5><%=link_to 'Add Songs', new_artist_album_song_path(:album_id => @album, :artist_id => @album.artist) %></h5>
+
+<div class="album-info">
 <%= image_tag @album.public_filename, :class => "profile-image photo",
                 :alt => h(@album.title) %>
+</div>
