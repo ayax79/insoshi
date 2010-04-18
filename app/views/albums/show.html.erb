@@ -20,7 +20,7 @@
         $(function() {
             var so = new SWFObject("<%= swf_path 'playerMultipleList.swf' %>", "player", "295", "200", "7", "#FFFFFF");
             so.addVariable("autoPlay", "no");
-            so.addVariable("playlistPath", '<%= url_for :controller => 'songs', :action => 'index', :format => 'xml', :album_id => @album.id %>');
+            so.addVariable("playlistPath", '<%= album_song_list_xml @album %>');
             so.write("flashPlayer");
         });
     </script>
