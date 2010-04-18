@@ -1,7 +1,7 @@
 class AlbumsController < ApplicationController
   include SharedFilters
 
-  before_filter :artist_check, :only => [:new, :create]
+  before_filter :prepare_artist
   before_filter :require_member, :only => [:new, :create]
 
 
