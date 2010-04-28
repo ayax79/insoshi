@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   map.resources :categories
   map.resources :links
   map.resources :events, :member => { :attend => :get,
@@ -63,12 +64,17 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
+  map.namespace :facebook do |facebook|
+    facebook.resources :artists
+  end
+
   map.signup '/signup', :controller => 'people', :action => 'new'
   map.login '/login', :controller => 'sessions', :action => 'new'
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.home '/', :controller => 'home'
   map.about '/about', :controller => 'home', :action => 'about'
   map.admin_home '/admin/home', :controller => 'home'
+  map.facebook_home '/facebook', :controller => 'home'
 
   # The priority is based upon order of creation: first created -> highest priority.
 
