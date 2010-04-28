@@ -84,7 +84,7 @@ module ActionView
   # specified globally for the entire action, but they work in a similar fashion. Imagine a list with two types
   # of users:
   #
-  #   <%# app/views/users/index.html.erb &>
+  #   <%# app/views/users/index.fbml.erb &>
   #   Here's the administrator:
   #   <%= render :partial => "user", :layout => "administrator", :locals => { :user => administrator } %>
   #
@@ -145,7 +145,7 @@ module ActionView
   #     <%= yield user %>
   #   </div>
   #
-  #   <%# app/views/users/index.html.erb &>
+  #   <%# app/views/users/index.fbml.erb &>
   #   <% render :layout => @users do |user| %>
   #     Title: <%= user.title %>
   #   <% end %>
@@ -161,7 +161,7 @@ module ActionView
   #     <%= yield user, :footer %>
   #   </div>
   #
-  #   <%# app/views/users/index.html.erb &>
+  #   <%# app/views/users/index.fbml.erb &>
   #   <% render :layout => @users do |user, section| %>
   #     <%- case section when :header -%>
   #       Title: <%= user.title %>

@@ -5,7 +5,7 @@ class StatesController < ApplicationController
     @states = Geo::State.find(:all)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.fbml.erb
       format.xml  { render :xml => @states }
     end
   end

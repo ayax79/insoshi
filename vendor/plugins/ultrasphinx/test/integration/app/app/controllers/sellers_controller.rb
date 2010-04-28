@@ -5,7 +5,7 @@ class SellersController < ApplicationController
     @sellers = Seller.find(:all)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.fbml.erb
       format.xml  { render :xml => @sellers }
     end
   end

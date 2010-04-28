@@ -7,7 +7,7 @@ module ActionView
       # and turn them into inline spans that contains the missing key, such that you can see in a view what is missing where.
       #
       # Second, it'll scope the key by the current partial if the key starts with a period. So if you call translate(".foo") from the
-      # people/index.html.erb template, you'll actually be calling I18n.translate("people.index.foo"). This makes it less repetitive
+      # people/index.fbml.erb template, you'll actually be calling I18n.translate("people.index.foo"). This makes it less repetitive
       # to translate many keys within the same partials and gives you a simple framework for scoping them consistently. If you don't
       # prepend the key with a period, nothing is converted.
       def translate(key, options = {})

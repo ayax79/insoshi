@@ -5,7 +5,7 @@ class AddressesController < ApplicationController
     @addresses = Geo::Address.find(:all)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.fbml.erb
       format.xml  { render :xml => @addresses }
     end
   end

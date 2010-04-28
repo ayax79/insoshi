@@ -31,13 +31,13 @@ module ActionView #:nodoc:
 
       # Returns a ActionView::Template object for the given path string. The
       # input path should be relative to the view path directory,
-      # +hello/index.html.erb+. This method also has a special exception to
+      # +hello/index.fbml.erb+. This method also has a special exception to
       # match partial file names without a handler extension. So
       # +hello/index.html+ will match the first template it finds with a
-      # known template extension, +hello/index.html.erb+. Template extensions
+      # known template extension, +hello/index.fbml.erb+. Template extensions
       # should not be confused with format extensions +html+, +js+, +xml+,
       # etc. A format must be supplied to match a formated file. +hello/index+
-      # will never match +hello/index.html.erb+.
+      # will never match +hello/index.fbml.erb+.
       def [](path)
       end
 
