@@ -65,7 +65,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :facebook do |facebook|
-    facebook.resources :artists
+    facebook.resources :artists, :home
   end
 
   map.signup '/signup', :controller => 'people', :action => 'new'
