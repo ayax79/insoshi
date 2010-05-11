@@ -1,5 +1,5 @@
 class Facebook::ArtistsController < ApplicationController
-  layout :facebook
+  layout "facebook"
   
   def show
     #@artist = Artist.find(params[:id])

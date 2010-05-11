@@ -64,6 +64,8 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
+  map.connect '/facebook', :namespace => 'facebook', :controller => 'home', :action => 'index'
+
   map.namespace :facebook do |facebook|
     facebook.resources :artists, :home
   end
