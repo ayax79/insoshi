@@ -1,0 +1,10 @@
+<% @person.members.each do |artist_member|
+    artist = artist_member.artist
+%>
+    <div class="artist">
+      Artist name: <%= artist.name %>
+    </div>
+
+<% end %>
+
+<br /><br />Owner id : <%= @owner_id %>
