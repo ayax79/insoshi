@@ -23,4 +23,16 @@ class Facebook::ArtistsController < ApplicationController
     end
   end
 
+  def top_songs
+    @artist = Artist.find(params[:id])
+    @songs = []
+    @artist.albums.each do |album|
+      @songs = @songs + album.songs
+    end
+    puts @songs
+    respond_to do |format|
+      format.xml { render :template => "songs/index", :xml => @songs }
+    end
+  end
+
 end

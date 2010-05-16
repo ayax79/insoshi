@@ -24,3 +24,6 @@ RICH_TEXT_HEIGHT = '350px'
 RPX_BASE_URL = 'https://rpxnow.com'
 RPX_API_KEY = '07d8dfed559df3751e05fdb4ab2bdaf94d4b48c4'
 RPX_REALM = 'maynerd'
+
+
+JAMFU_HOST="dink.redpillsystems.com"

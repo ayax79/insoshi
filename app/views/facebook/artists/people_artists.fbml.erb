@@ -5,8 +5,11 @@
 %>
     <div class="jamfu_artist">
       Artist name: <%= artist.name %>
+
+      <%= player_link(artist) %>
+
     </div>
 
 <% end %>
 
-<br /><br />Owner id : <%= @owner_id %>
+<br/><br/>Owner id : <%= @owner_id %>

@@ -1,2 +1,0 @@
-module Facebook::HomeControllerHelper
-end
