@@ -15,7 +15,7 @@ module Facebook::ArtistHelper
   end
 
   def player_flashvars(artist)
-    %(autoPlay=no&playlistPath=#{songs_link(artist)})
+    CGI::escape %(autoPlay=no&playlistPath=#{songs_link(artist)})
   end
   
 end
