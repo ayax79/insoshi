@@ -7,7 +7,7 @@ module Facebook::ArtistHelper
   end
 
   def swf_player_path
-    "http://#{JAMFU_HOST}#{swf_path("playerMultipleList.swf")}"
+    swf_path("playerMultipleList.swf")
   end
 
   def songs_link(artist)
