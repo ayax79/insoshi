@@ -11,7 +11,7 @@ module Facebook::ArtistHelper
   end
 
   def songs_link(artist)
-    url_for :host => JAMFU_HOST, :controller => "facebook/artists", :action => "top_songs", :id => artist.id
+    %(http://#{JAMFU_HOST}/facebook/artists/top_songs/#{artist.id})
   end
 
   def player_flashvars(artist)
