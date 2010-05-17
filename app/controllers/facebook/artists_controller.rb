@@ -11,7 +11,7 @@ class Facebook::ArtistsController < ApplicationController
     respond_to do |format|
       unless owner.nil?
         if owner.is_a? Artist
-          @artists = owner
+          @artist = owner
           format.fbml
         elsif owner.is_a? Person
           @person = owner

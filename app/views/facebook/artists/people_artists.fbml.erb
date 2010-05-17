@@ -10,6 +10,15 @@
 
     </div>
 
-<% end %>
+    <%- artist.albums do |album| -%>
+        <%- album.songs do |song| -%>
+            <fb:mp3 src="http://<%= JAMFU_HOST %><%= song.public_filename %>" artist="blah" song="blah"/>
+        <%- end -%>
+
+    <%- end -%>
+
+
+<%- end -%>
+
 
 <br/><br/>Owner id : <%= @owner_id %>

@@ -10,12 +10,12 @@ module Facebook::ArtistHelper
     swf_path("playerMultipleList.swf")
   end
 
-  def songs_link(artist)
+  def top_songs_link(artist)
     %(http://#{JAMFU_HOST}/facebook/artists/top_songs/#{artist.id})
   end
 
   def player_flashvars(artist)
-    CGI::escape %(autoPlay=no&playlistPath=#{songs_link(artist)})
+    CGI::escape %(autoPlay=no&playlistPath=#{top_songs_link(artist)})
   end
   
 end
