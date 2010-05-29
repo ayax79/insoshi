@@ -1,0 +1,90 @@
+<mockup version="1.0" skin="sketch" measuredW="856" measuredH="565" mockupW="775" mockupH="525">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Button" x="692" y="30" w="-1" h="-1" measuredW="39" measuredH="28" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Go</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::TextInput" x="262" y="31" w="404" h="-1" measuredW="150" measuredH="27" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Artist%2C%20Album%2C%20Keyword</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Image" x="83" y="73" w="137" h="89" measuredW="77" measuredH="79" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Single%20of%20the%20Week</text>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="__group__" x="71" y="177" w="-1" h="-1" measuredW="775" measuredH="340" zOrder="3" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="17" controlTypeID="com.balsamiq.mockups::FieldSet" x="266" y="0" w="243" h="340" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>Popular%20Artists</text>
+          </controlProperties>
+        </control>
+        <control controlID="18" controlTypeID="com.balsamiq.mockups::FieldSet" x="521" y="1" w="254" h="338" measuredW="200" measuredH="170" zOrder="1" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>Shows%20near%20you</text>
+          </controlProperties>
+        </control>
+        <control controlID="19" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="243" h="340" measuredW="200" measuredH="170" zOrder="2" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>New%20Albums</text>
+          </controlProperties>
+        </control>
+        <control controlID="20" controlTypeID="__group__" x="15" y="22" w="164" h="58" measuredW="164" measuredH="58" zOrder="3" locked="false" isInGroup="24">
+          <groupChildrenDescriptors>
+            <control controlID="5" controlTypeID="com.balsamiq.mockups::Image" x="0" y="0" w="64" h="58" measuredW="77" measuredH="79" zOrder="0" locked="false" isInGroup="8">
+              <controlProperties>
+                <text/>
+              </controlProperties>
+            </control>
+            <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="70" y="0" w="85" h="23" measuredW="85" measuredH="23" zOrder="1" locked="false" isInGroup="8">
+              <controlProperties>
+                <text>Infinite%20Arms</text>
+              </controlProperties>
+            </control>
+            <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="70" y="21" w="94" h="23" measuredW="94" measuredH="23" zOrder="2" locked="false" isInGroup="8">
+              <controlProperties>
+                <text>Band%20of%20Horses</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="21" controlTypeID="com.balsamiq.mockups::Image" x="15" y="95" w="63" h="59" measuredW="77" measuredH="79" zOrder="4" locked="false" isInGroup="24">
+          <controlProperties>
+            <text/>
+          </controlProperties>
+        </control>
+        <control controlID="22" controlTypeID="com.balsamiq.mockups::Label" x="100" y="95" w="104" h="23" measuredW="98" measuredH="23" zOrder="5" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>Congratulations</text>
+          </controlProperties>
+        </control>
+        <control controlID="23" controlTypeID="com.balsamiq.mockups::Label" x="100" y="116" w="115" h="23" measuredW="43" measuredH="23" zOrder="6" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>MGMT</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Image" x="249" y="72" w="116" h="90" measuredW="77" measuredH="79" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Win%20tickets</text>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Canvas" x="384" y="72" w="446" h="90" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::MediaControls" x="403" y="99" w="-1" h="-1" measuredW="110" measuredH="36" zOrder="6" locked="false" isInGroup="-1"/>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::ProgressBar" x="543" y="86" w="272" h="26" measuredW="100" measuredH="20" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Label" x="545" y="113" w="-1" h="-1" measuredW="83" measuredH="23" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Random%20Song</text>
+      </controlProperties>
+    </control>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::Link" x="140" y="532" w="-1" h="-1" measuredW="122" measuredH="23" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Are%20you%20and%20artist%3F</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
