@@ -27,3 +27,5 @@ RPX_REALM = 'maynerd'
 
 
 JAMFU_HOST="dink.redpillsystems.com"
+
+FACEBOOK_APP_ID=119681858044432
