@@ -1,5 +1,5 @@
 class Facebook::ArtistsController < ApplicationController
-  layout "facebook"
+  layout "facebook/profile"
 
   def show
     @owner_id = params[:fb_sig_profile_user]

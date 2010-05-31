@@ -1,5 +1,5 @@
 class Facebook::HomeController  < ApplicationController
-  layout "facebook"
+  layout "facebook/canvas"
 
   def index
 
