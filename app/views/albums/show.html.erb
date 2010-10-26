@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'jquery.jplayer.min' %>
+
 <h2><%= @album.title %> : <%= @artist.name %></h2>
 <h5><%= link_to 'Add Songs', new_artist_album_song_path(:album_id => @album, :artist_id => @album.artist) %></h5>
 
@@ -9,19 +11,24 @@
 <% end %>
 
 <% column_div :type => :secondary do %>
-    <%= javascript_include_tag 'swfobject' %>
-    <div id="flashPlayer">
+
+    <div id="jquery_jplayer">
       No Songs have been uploaded.
     </div>
 <% end %>
 
 <%- unless @album.songs.empty? -%>
+
     <script type="text/javascript">
-        $(function() {
-            var so = new SWFObject("<%= swf_path 'playerMultipleList.swf' %>", "player", "295", "200", "7", "#FFFFFF");
-            so.addVariable("autoPlay", "no");
-            so.addVariable("playlistPath", '<%= album_song_list_xml @album %>');
-            so.write("flashPlayer");
+        $(document).ready(function() {
+            $("#jquery_jplayer").jPlayer({
+                ready: function() {
+                    this.element.jPlayer("setFile", "http://www.miaowmusic.com/audio/mp3/Miaow-07-Bubble.mp3", "http://www.miaowmusic.com/audio/ogg/Miaow-07-Bubble.ogg").jPlayer("play");
+                },
+                nativeSupport: true, oggSupport: true, customCssIds: false
+            }).jPlayer("onSoundComplete", function() {
+                this.element.jPlayer("play");
+            });
         });
     </script>
 <%- end -%>
